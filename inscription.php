@@ -3,55 +3,49 @@
 $page_title = "Inscription - Quiz 2019";
 
 include ('header.php');
-include('functions.php');
-
-session_start();
+include ('functions.php');
 
 // Connexion à la base de données
-$db_conn = connexion_db();
-$username = "";
+$mysql_db = connexion_db();
 
 // Appel à la fonction enregistrer_user après avoir cliqué sur le bouton d'enregistrement
+if (isset($_SESSION['bad_login'])) unset($_SESSION['bad_login']);
+
 if (isset($_POST['reg_btn'])){
-    echo 'test';
     enregistrer_user();
 }
-
 ?>
 
-<body>
-    <h1>Inscription</h1>
+<h2>Inscription</h2>
 
-    <section>
-        <form id="inscription_form" method="post" action="inscription.php" onsubmit="return isFormOK()">
-            <div>
-                <label>Nom d'utilisateur</label>
-                <input type="text" id="username" name="username" value="<?php echo $username?>">
-            </div>
+<section>
+    <form id="inscription_form" method="post" action="<?= $_SERVER['PHP_SELF'] ?>" onsubmit="return isFormOK()">
+        <div>
+            <label>Nom d'utilisateur</label>
+            <input type="text" id="username" name="username">
+            <?php if (isset($_SESSION['bad_login'])) : ?>
+                <p style="color: red"><?= $_SESSION['bad_login'] ?></p>
+            <?php endif ?>
+        </div>
 
-            <div>
-                <label>Mot de passe</label>
-                <input type="password" name="password1">
-            </div>
+        <div>
+            <label>Mot de passe</label>
+            <input type="password" name="password1">
+        </div>
 
-            <div>
-                <label>Confirmer mot de passe</label>
-                <input type="password" name="password2">
-            </div>
+        <div>
+            <label>Confirmer mot de passe</label>
+            <input type="password" name="password2">
+        </div>
 
-            <div>
-                <button type="submit" name="reg_btn">S'inscrire</button>
-            </div>
+        <div>
+            <button type="submit" name="reg_btn">S'inscrire</button>
+        </div>
 
-            <p>
-                Déjà inscrit ? <a href="login.php">Se connecter</a>
-            </p>
-        </form>
-    </section>
-</body>
+        <p>
+            Déjà inscrit ? <a href="login.php">Se connecter</a>
+        </p>
+    </form>
+</section>
 
-<?php
-
-include 'footer.php';
-
-?>
+<?php include 'footer.php'; ?>

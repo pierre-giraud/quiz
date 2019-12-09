@@ -4,6 +4,8 @@
  */
 ?>
 
+</body>
+
 <hr>
 
 <footer>

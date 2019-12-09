@@ -34,7 +34,8 @@ function validerFormulaire(){
 Fonction indiquant si le formulaire d'inscription est correctement rempli
  */
 function isFormOK(){
-    validerFormulaire();
+    //validerFormulaire();
+    //alert("ok");
 
-    return false;
+    return true;
 }

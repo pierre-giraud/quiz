@@ -3,10 +3,9 @@
 $page_title = "Inscription - Quiz 2019";
 
 include ('header.php');
-include ('functions.php');
 
 // Connexion à la base de données
-$mysql_db = connexion_db();
+//$mysql_db = connexion_db();
 
 // Appel à la fonction enregistrer_user après avoir cliqué sur le bouton d'enregistrement
 if (isset($_SESSION['bad_login'])) unset($_SESSION['bad_login']);

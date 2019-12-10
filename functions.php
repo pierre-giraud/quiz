@@ -2,6 +2,7 @@
 
 include ('model/Utilisateur.php');
 
+// Démarre ou continue une session
 session_start();
 
 // Si le bouton de déconnexion est utilisé
@@ -89,8 +90,6 @@ function connecter_user(){
 }
 
 function deconnexion_user(){
-    global $mysql_db;
-
     session_destroy();
     unset($_SESSION['user']);
     header('location: login.php');

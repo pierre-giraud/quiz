@@ -1,6 +1,7 @@
 <?php
 
 include ('model/Utilisateur.php');
+include ('constants.php');
 
 // Démarre ou continue une session
 session_start();
@@ -12,13 +13,7 @@ if (isset($_POST['deco'])) deconnexion_user();
  * Fonction servant à se connecter à la base de données
  */
 function connexion_db(){
-    $db_host = "localhost";
-    $db_user = 'root';
-    $db_pass = NULL;
-    $db_name = 'quiz_db';
-
-    $db_connexion = new mysqli($db_host, $db_user, $db_pass, $db_name) or die("Echec de la connexion");
-
+    $db_connexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) or die("Echec de la connexion");
     return $db_connexion;
 }
 

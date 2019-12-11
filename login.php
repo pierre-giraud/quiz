@@ -4,9 +4,6 @@ $page_title = "Connexion - Quiz 2019";
 
 include ('header.php');
 
-// Connexion à la base de données
-//$mysql_db = connexion_db();
-
 // Appel à la fonction connecter_user après avoir cliqué sur le bouton Connexion
 unset($_SESSION['bad_login']);
 unset($_SESSION['bad_passwd']);

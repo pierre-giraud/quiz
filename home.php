@@ -17,6 +17,18 @@ if (!isset($_SESSION['user'])) header('location: login.php'); // Si l'utilisateu
 
     <?php if ($_SESSION['user']->getType() === 'admin') : ?>
     <p>Page HOME de <strong>l'administrateur</strong></p>
+    <p>Liste des utilisateurs : </p>
+    <?php
+        global $mysql_db;
+
+        $query = $mysql_db -> query("SELECT * FROM users WHERE type_user = 'user'");
+        if ($query -> num_rows > 0) : ?>
+            <ul>
+            <?php while ($row = $query -> fetch_array(MYSQLI_ASSOC)) : ?>
+                <li>Utilisateur n°<?= $row['id_user'] ?> : <?= $row['nom_user'] ?></li>
+            <?php endwhile; ?>
+            </ul>
+        <?php endif; ?>
     <?php else : ?>
     <p>Page HOME de <strong>l'utilisateur</strong></p>
     <?php endif ?>

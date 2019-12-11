@@ -2,7 +2,7 @@
     include ('functions.php');
 
     // Connexion à la base de données
-    $mysql_db= connexion_db();
+    $mysql_db = connexion_db();
 ?>
 
 <!doctype html>

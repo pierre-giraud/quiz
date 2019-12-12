@@ -16,7 +16,9 @@
     <?php endif ?>
 
     <!--<link rel="stylesheet" href="style.css">-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script type="text/javascript" src="js/validation.js"></script>
+    <script type="text/javascript" src="js/functions.js"></script>
 </head>
 
 <body>

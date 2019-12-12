@@ -1,4 +1,7 @@
 $(document).ready(function(){
+    let form_inscription = $('#inscription_form');
+
+    // Fonction lors d'un clic pour supprimer un utilisateur
     $('#suppr_user').click(function(){
        if (confirm("Êtes-vous sûr de vouloir supprimer les utilisateurs sélectionnés ?")) {
            let id_user = [];
@@ -36,5 +39,17 @@ $(document).ready(function(){
             }});*/
            }
        }
+    });
+
+    //validerFormulaire();
+
+    // Fonction utilisée à chaque modification du formulaire
+    form_inscription.change(function(){
+        validerFormulaire();
+    });
+
+    // Fonction utilisée à chaque tentative d'envoie du formulaire
+    form_inscription.submit(function(){
+        return isFormOK();
     });
 });

@@ -4,30 +4,32 @@ Fonction permettant de valider ou non le formulaire en ajoutant la classe
  */
 function validerFormulaire(){
     //let form = document.getElementById('inscription_form');
-    let form = $('inscription_form');
-    let username = form['username'];
-    let password1 = form['password1'];
-    let password2 = form['password2'];
+    let form = $('#inscription_form');
+    let username = form.find('input[name="username"]');
+    let password1 = form.find('input[name="password1"]');
+    let password2 = form.find('input[name="password2"]');
+
+    //alert('username : ' + username.val() + ' password1 : ' + password1.val() + ' p2 : ' + password2.val());
 
     // Nom d'utilisateur
-    if (username.value.length < 4 || username.value.length > 25){
-        username.className = "error";
+    if (username.val().length < 4 || username.val().length > 25){
+        username.addClass('error');
     } else {
-        username.className = "none";
+        username.removeClass('error');
     }
 
     // Mot de passe
-    if (password1.value === ''){
-        password1.className = "error";
+    if (password1.val() === ''){
+        password1.addClass('error');
     } else {
-        password1.className = "none";
+        password1.removeClass('error');
     }
 
     // Confirmation du mot de passe
-    if (password2.value === '' || password2.value !== password1.value){
-        password2.className = "error";
+    if (password2.val() === '' || password2.val() !== password1.val()){
+        password2.addClass('error');
     } else {
-        password2.className = "none";
+        password2.removeClass('error');
     }
 }
 
@@ -35,8 +37,13 @@ function validerFormulaire(){
 Fonction indiquant si le formulaire d'inscription est correctement rempli
  */
 function isFormOK(){
-    validerFormulaire();
-    //alert("ok");
+    let retVal = true;
 
-    return true;
+    $('form#inscription_form :input').each(function(){
+        if ($(this).hasClass('error') === true) {
+            retVal =  false;
+        }
+    });
+
+    return retVal;
 }

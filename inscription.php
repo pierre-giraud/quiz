@@ -15,7 +15,7 @@ if (isset($_POST['reg_btn'])){
 <h2>Inscription</h2>
 
 <section>
-    <form id="inscription_form" method="post" action="<?= $_SERVER['PHP_SELF'] ?>" onsubmit="return isFormOK()">
+    <form id="inscription_form" method="post" action="<?= $_SERVER['PHP_SELF'] ?>">
         <div>
             <label>Nom d'utilisateur</label>
             <input type="text" id="username" name="username">

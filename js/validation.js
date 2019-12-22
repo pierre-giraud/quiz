@@ -39,11 +39,11 @@ Fonction indiquant si le formulaire d'inscription est correctement rempli
 function isFormOK(){
     let retVal = true;
 
-    $('form#inscription_form :input').each(function(){
+    /*$('form#inscription_form :input').each(function(){
         if ($(this).hasClass('error') === true) {
             retVal =  false;
         }
-    });
+    });*/
 
     return retVal;
 }

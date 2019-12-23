@@ -8,15 +8,13 @@ if (!isset($_SESSION['user'])) header('location: login.php'); // Si l'utilisateu
 
 ?>
 
-<h2>Profil utilisateur</h2>
-
 <section>
     <?php if (isset($_SESSION['logged'])) : ?>
         <h3><?= $_SESSION['logged'] ?></h3>
     <?php unset($_SESSION['logged']); endif ?>
 
     <?php if ($_SESSION['user']->getType() === 'admin') : ?>
-        <p>Page HOME de <strong>l'administrateur</strong></p>
+        <h2>Page HOME de <strong>l'administrateur</strong></h2>
         <p>Liste des utilisateurs : </p>
         <?php
             global $mysql_db;
@@ -39,11 +37,35 @@ if (!isset($_SESSION['user'])) header('location: login.php'); // Si l'utilisateu
                 </table>
                 <button type="button" name="suppr_user" id="suppr_user">Supprimer</button>
         <?php else : ?>
-            <p>Aucun utilisateur n'est encore enregistré !</p>
+            <p>Aucun utilisateur n'est encore enregistré !</p>l
         <?php endif; ?>
     <?php else : ?>
-        <p>Page HOME de <strong>l'utilisateur</strong></p>
+        <h2>Page HOME de <strong>l'utilisateur</strong></h2>
     <?php endif ?>
+
+    <h3>Vos quiz</h3>
+
+    <?php
+
+    global $mysql_db;
+    $query = $mysql_db -> query("SELECT * FROM quiz WHERE id_user =" . $_SESSION['user']->getId());
+
+    if ($query -> num_rows == 0) : ?>
+        <p>Vous n'avez aucun quiz</p>
+    <?php else : ?>
+        <table border="1">
+            <tr>
+                <th>ID quiz</th>
+                <th>Titre</th>
+            </tr>
+            <?php while ($row = $query -> fetch_array(MYSQLI_ASSOC)) : ?>
+                <tr>
+                    <td><?= $row['id_quiz'] ?></td>
+                    <td><?= $row['titre_quiz'] ?></td>
+                </tr>
+            <?php endwhile; ?>
+        </table>
+    <?php endif; ?>
 </section>
 
 <?php include 'footer.php'; ?>

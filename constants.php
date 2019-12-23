@@ -10,6 +10,6 @@ define('DB_NAME', 'quiz_db');
 /*define('DB_HOST', 'localhost');
 define('DB_USER', 'projet');
 define('DB_PASSWORD', 'tejorp');
-define('DB_NAME', 'projet');/*
+define('DB_NAME', 'projet'); */
 
 ?>

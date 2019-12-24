@@ -42,7 +42,9 @@ if (!isset($_SESSION['user'])) header('location: login.php'); // Si l'utilisateu
     <?php else : ?>
         <h2>Page HOME de <strong>l'utilisateur</strong></h2>
     <?php endif ?>
-
+</section>
+<br><br>
+<section>
     <h3>Vos quiz</h3>
 
     <?php
@@ -66,6 +68,9 @@ if (!isset($_SESSION['user'])) header('location: login.php'); // Si l'utilisateu
             <?php endwhile; ?>
         </table>
     <?php endif; ?>
+    <form action="util/create_quiz.php" method="post">
+        <button type="submit" name="btn_create_quiz">Créer un quiz</button>
+    </form>
 </section>
 
 <?php include 'footer.php'; ?>

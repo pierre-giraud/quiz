@@ -2,9 +2,9 @@
 
 $page_title = "Home - Quiz 2019";
 
-include ('header.php');
+include('../header.php');
 
-if (!isset($_SESSION['user'])) header('location: login.php'); // Si l'utilisateur n'est pas connecté, redirection
+if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisateur n'est pas connecté, redirection
 
 ?>
 
@@ -59,18 +59,20 @@ if (!isset($_SESSION['user'])) header('location: login.php'); // Si l'utilisateu
             <tr>
                 <th>ID quiz</th>
                 <th>Titre</th>
+                <th>Administrer</th>
             </tr>
             <?php while ($row = $query -> fetch_array(MYSQLI_ASSOC)) : ?>
                 <tr>
                     <td><?= $row['id_quiz'] ?></td>
                     <td><?= $row['titre_quiz'] ?></td>
+                    <td><button type="button" name="btn_choose_quiz" value="<?= $row['id_quiz'] ?>">Voir</td>
                 </tr>
             <?php endwhile; ?>
         </table>
     <?php endif; ?>
-    <form action="util/create_quiz.php" method="post">
+    <form action="create_quiz.php" method="post">
         <button type="submit" name="btn_create_quiz">Créer un quiz</button>
     </form>
 </section>
 
-<?php include 'footer.php'; ?>
+<?php include '../footer.php'; ?>

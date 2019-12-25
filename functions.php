@@ -49,7 +49,7 @@ function enregistrer_user(){
         $_SESSION['user'] = getUserById($user_id);
         $_SESSION['logged'] = "Vous êtes maintenant connecté !";
         unset($_SESSION['bad_login']);
-        header('location: home.php');
+        header('location: user/home.php');
     } else {
         $_SESSION['bad_login'] = "Nom d'utilisateur déjà utilisé";
     }
@@ -74,7 +74,7 @@ function connecter_user(){
             $_SESSION['logged'] = "Vous êtes maintenant connecté !";
             unset($_SESSION['bad_login']);
             unset($_SESSION['bad_passwd']);
-            header('location: home.php');
+            header('location: user/home.php');
         } else {
             $_SESSION['username'] = $username;
             $_SESSION['bad_passwd'] = "Mot de passe incorrect";
@@ -105,4 +105,46 @@ function getUserById($id){
     }
 
     return $user_instance;
+}
+
+function create_quiz(){
+    global $mysql_db;
+    $id_quiz = 0;
+    $id_question = 0;
+
+    // Parcours des données de $_POST pour les trier
+   foreach ($_POST as $key => $value){
+        // Remplissage de la table quiz
+        if ($key == "quizname") {
+            $quizname = $mysql_db -> real_escape_string(trim($value));
+            $mysql_db -> query("INSERT INTO quiz (titre_quiz, ispublic_quiz, id_user) VALUES ('$quizname', 0," . $_SESSION['user']->getId() . ")");
+            $id_quiz = $mysql_db -> insert_id;
+            echo "quizname du quiz ". $id_quiz .": [" .$quizname."] done<br>";
+        } elseif (strpos($key, "enonce") !== false){
+            $question = $mysql_db -> real_escape_string(htmlspecialchars($value));
+            $mysql_db -> query("INSERT INTO questions (texte_question, id_quiz) VALUES ('$question'," . $id_quiz . ")");
+            $id_question = $mysql_db -> insert_id;
+            echo "enonce n°". $id_question ." du quiz ".$id_quiz." : [".$question."] done<br>";
+        } elseif (strpos($key,"reponse") !== false) {
+            $reponse = $mysql_db -> real_escape_string(htmlspecialchars($value));
+            $mysql_db -> query("INSERT INTO reponses (texte_reponse, iscorrect_reponse, id_question) VALUES ('$reponse', 0," . $id_question . ")");
+            $id_reponse = $mysql_db -> insert_id;
+            echo "reponse n°". $id_reponse. " de la question ". $id_question ." [". $reponse ."] done<br>";
+        }
+    }
+
+    var_dump($_POST);
+
+    //header('location: home.php');
+
+    // Données de la table quiz
+    //$quizname = $mysql_db -> real_escape_string(trim($_POST['quizname']));
+    //$id_user = $_SESSION['user'] -> getId();
+
+    // Données de la table questions
+    //$question = $mysql_db -> real_escape_string(htmlspecialchars($_POST['enonce1']));
+
+    // Exécution des requêtes SQL
+    //$query = "INSERT INTO quiz (titre_quiz, ispublic_quiz, id_user) VALUES ('$quizname', 0," . $_SESSION['user']->getId() . ")";
+    //$mysql_db -> query($query);
 }

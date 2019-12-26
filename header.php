@@ -3,7 +3,7 @@
 
     // Connexion à la base de données
     $mysql_db = connexion_db();
-echo "PENSER A FAIRE DES DECLENCHEURS POUR LA BASE AU NIVEAU DES DELETE<br>";
+    echo "PENSER A REGROUPER LES SUPPRESSION<br>";
 ?>
 
 <!doctype html>

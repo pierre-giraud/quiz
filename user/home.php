@@ -28,10 +28,10 @@ if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisa
                         <th>Suppression</th>
                     </tr>
                 <?php while ($row = $query -> fetch_array(MYSQLI_ASSOC)) : ?>
-                    <tr id="row_<?= $row['id_user'] ?>">
+                    <tr id="rowu_<?= $row['id_user'] ?>">
                         <td><?= $row['id_user'] ?></td>
                         <td><?= $row['nom_user'] ?></td>
-                        <td><input type="checkbox" name="choix_user" value="<?= $row['id_user'] ?>"></td>
+                        <td><input type="checkbox" id="choix_user" value="<?= $row['id_user'] ?>"></td>
                     </tr>
                 <?php endwhile; ?>
                 </table>
@@ -60,16 +60,20 @@ if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisa
                 <th>ID quiz</th>
                 <th>Titre</th>
                 <th>Administrer</th>
+                <th>Suppression</th>
             </tr>
             <?php while ($row = $query -> fetch_array(MYSQLI_ASSOC)) : ?>
-                <tr>
+                <tr id="rowq_<?= $row['id_quiz'] ?>">
                     <td><?= $row['id_quiz'] ?></td>
                     <td><?= $row['titre_quiz'] ?></td>
                     <td><button type="button" name="btn_choose_quiz" value="<?= $row['id_quiz'] ?>">Voir</td>
+                    <td><input type="checkbox" id="choix_quiz" value="<?= $row['id_quiz'] ?>"></td>
                 </tr>
             <?php endwhile; ?>
         </table>
+        <button type="button" name="suppr_quiz" id="suppr_quiz">Supprimer</button>
     <?php endif; ?>
+    <br><br>
     <form action="create_quiz.php" method="post">
         <button type="submit" name="btn_create_quiz">Créer un quiz</button>
     </form>

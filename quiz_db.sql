@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.4
+-- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  jeu. 26 déc. 2019 à 00:23
--- Version du serveur :  5.7.24
--- Version de PHP :  7.2.14
+-- Généré le :  ven. 27 déc. 2019 à 21:52
+-- Version du serveur :  8.0.18
+-- Version de PHP :  7.3.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -35,14 +35,18 @@ CREATE TABLE IF NOT EXISTS `questions` (
   `id_quiz` int(11) NOT NULL,
   PRIMARY KEY (`id_question`),
   KEY `quiz_fk` (`id_quiz`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `questions`
 --
 
 INSERT INTO `questions` (`id_question`, `texte_question`, `id_quiz`) VALUES
-(8, 'Oui ?', 6);
+(15, 'az', 13),
+(16, 'zoz', 14),
+(17, 'La question 1 ?', 15),
+(18, 'La question 2 ?', 15),
+(20, 'Une question 3 ?', 15);
 
 --
 -- Déclencheurs `questions`
@@ -67,14 +71,16 @@ CREATE TABLE IF NOT EXISTS `quiz` (
   `id_user` int(11) NOT NULL,
   PRIMARY KEY (`id_quiz`),
   KEY `user_fk` (`id_user`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `quiz`
 --
 
 INSERT INTO `quiz` (`id_quiz`, `titre_quiz`, `ispublic_quiz`, `id_user`) VALUES
-(6, 'Un nouveau jaj', 0, 60);
+(13, 'Un nouveau quiz', 1, 60),
+(14, 'Un nouveau jaj', 0, 60),
+(15, 'Un nouveau KEK', 1, 60);
 
 --
 -- Déclencheurs `quiz`
@@ -99,17 +105,30 @@ CREATE TABLE IF NOT EXISTS `reponses` (
   `id_question` int(11) NOT NULL,
   PRIMARY KEY (`id_reponse`),
   KEY `question_fk` (`id_question`)
-) ENGINE=MyISAM AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=92 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `reponses`
 --
 
 INSERT INTO `reponses` (`id_reponse`, `texte_reponse`, `iscorrect_reponse`, `id_question`) VALUES
-(32, 'non', 0, 8),
-(31, 'non', 0, 8),
-(30, 'non', 0, 8),
-(29, 'non', 0, 8);
+(60, '', 0, 15),
+(59, '', 0, 15),
+(58, 'dz', 0, 15),
+(57, 'azd', 0, 15),
+(61, 'oui', 0, 16),
+(62, 'on', 0, 16),
+(63, 'kek', 0, 16),
+(64, '', 0, 16),
+(65, 'J\'avoue', 0, 17),
+(66, 'Grave', 0, 17),
+(76, 'Oui', 0, 18),
+(69, 'peut etre', 0, 18),
+(70, 'oui', 0, 18),
+(79, 'De ouf !', 0, 20),
+(80, 'Ouais !', 0, 20),
+(81, 'Non !', 0, 20),
+(82, 'ZOZ', 0, 20);
 
 -- --------------------------------------------------------
 
@@ -124,7 +143,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `mdp_user` varchar(100) NOT NULL,
   `type_user` varchar(10) NOT NULL,
   UNIQUE KEY `index_id` (`id_user`)
-) ENGINE=MyISAM AUTO_INCREMENT=122 DEFAULT CHARSET=utf8mb4;
+) ENGINE=MyISAM AUTO_INCREMENT=125 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `users`

@@ -14,7 +14,7 @@ if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisa
 
     <?php if ($_SESSION['user']->getType() === 'admin') : ?>
         <h2>Page HOME de <strong>l'administrateur</strong></h2>
-        <p>Liste des utilisateurs : </p>
+        <h3>Liste des utilisateurs : </h3>
         <?php
             global $mysql_db;
 
@@ -59,6 +59,7 @@ if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisa
                 <th>ID quiz</th>
                 <th>Titre</th>
                 <th>Administrer</th>
+                <th>Rendre public</th>
                 <th>Suppression</th>
             </tr>
             <?php while ($row = $query -> fetch_array(MYSQLI_ASSOC)) : ?>
@@ -70,16 +71,58 @@ if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisa
                         <button type="submit" id="btn_get_quiz" name="btn_get_quiz" value="<?= $row['id_quiz'] ?>">Administrer
                     </form>
                 </td>
+                <td><input type="checkbox" id="pquiz_<?= $row['id_quiz'] ?>" name="choix_public" value="<?= $row['id_quiz'] ?>"</td>
                 <td><input type="checkbox" id="choix_quiz" value="<?= $row['id_quiz'] ?>"></td>
             </tr>
             <?php endwhile; ?>
+            <tr>
+                <td colspan="3"></td>
+                <td><button type="button" name="btn_set_public" id="btn_set_public">Valider</button></td>
+                <td><button type="button" name="suppr_quiz" id="suppr_quiz">Supprimer</button></td>
+            </tr>
         </table>
-        <button type="button" name="suppr_quiz" id="suppr_quiz">Supprimer</button>
     <?php endif; ?>
     <br><br>
     <form action="create_quiz.php" method="post">
         <button type="submit" name="btn_create_quiz">Créer un quiz</button>
     </form>
 </section>
+
+<?php if ($_SESSION['user']->getType() === 'admin') : ?>
+<section>
+    <h3>Liste des quiz</h3>
+
+    <?php
+
+    global $mysql_db;
+    $query = $mysql_db -> query("SELECT * FROM quiz");
+
+    if ($query -> num_rows == 0) : ?>
+        <p>Aucun quiz enregistré</p>
+    <?php else : ?>
+        <table id="tablequizadmin" border="1">
+            <tr>
+                <th>ID quiz</th>
+                <th>Titre</th>
+                <th>Utilisateur</th>
+                <th>Suppression</th>
+            </tr>
+            <?php while ($row = $query -> fetch_array(MYSQLI_ASSOC)) : ?>
+                <?php
+                    $userquery = $mysql_db -> query("SELECT * FROM users WHERE id_user = ".$row['id_user']);
+                    $user = $userquery -> fetch_array(MYSQLI_ASSOC);
+                ?>
+                <tr id="rowqa_<?= $row['id_quiz'] ?>">
+                    <td><?= $row['id_quiz'] ?></td>
+                    <td><?= $row['titre_quiz'] ?></td>
+                    <td><?= $user['nom_user']?> (n°<?= $user['id_user']?>)</td>
+                    <td><input type="checkbox" id="choix_quiz_admin" value="<?= $row['id_quiz'] ?>"></td>
+                </tr>
+            <?php endwhile; ?>
+        </table>
+        <button type="button" name="suppr_quiz_admin" id="suppr_quiz_admin">Supprimer</button>
+    <?php endif; ?>
+</section>
+<?php endif; ?>
 
 <?php include '../footer.php'; ?>

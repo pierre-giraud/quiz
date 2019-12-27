@@ -1,6 +1,6 @@
 $(document).ready(function(){
     let form_inscription = $('#inscription_form');
-    let nb_Questions = 1;
+    let nb_Questions = $('div .div_question').length; // Nombre de questions du quiz affiché
 
     // Fonction lors d'un clic pour supprimer un utilisateur
     $('#suppr_user').click(function(){
@@ -13,7 +13,7 @@ $(document).ready(function(){
 
            if (id_user.length > 0){
                $.ajax({
-                   url: 'suppression_utilisateur.php',
+                   url: 'suppression.php',
                    type: 'post',
                    data: {
                        id_user: id_user
@@ -22,6 +22,13 @@ $(document).ready(function(){
                        for (let i = 0; i < id_user.length; ++i) {
                            $('tr#rowu_' + id_user[i] + '').css('background-color', '#cdaa90');
                            $('tr#rowu_' + id_user[i] + '').fadeOut('slow');
+                           $('tr#rowu_' + id_user[i] + '').remove();
+                       }
+
+                       // Si il n'y a plus d'utilisateurs enregistrés, on supprime le tableau
+                       if ($('#tableuser tr').length === 1){
+                           $('#tableuser').replaceWith("<p>Vous n'avez aucun quiz</p>");
+                           $('#suppr_user').remove();
                        }
                    },
                    error:function(){
@@ -43,7 +50,7 @@ $(document).ready(function(){
 
             if (id_quiz.length > 0){
                 $.ajax({
-                    url: 'suppression_quiz.php',
+                    url: 'suppression.php',
                     type: 'post',
                     data: {
                         id_quiz: id_quiz
@@ -52,6 +59,13 @@ $(document).ready(function(){
                         for (let i = 0; i < id_quiz.length; ++i) {
                             $('tr#rowq_' + id_quiz[i] + '').css('background-color', '#cdaa90');
                             $('tr#rowq_' + id_quiz[i] + '').fadeOut('slow');
+                            $('tr#rowq_' + id_quiz[i] + '').remove();
+                        }
+
+                        // Si le tableau ne contient plus de quiz, on le supprime
+                        if ($('#tablequiz tr').length === 1){
+                            $('#tablequiz').replaceWith("<p>Vous n'avez aucun quiz</p>");
+                            $('#suppr_quiz').remove();
                         }
                     },
                     error:function(){

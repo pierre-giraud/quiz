@@ -5,7 +5,6 @@ $page_title = "Home - Quiz 2019";
 include('../header.php');
 
 if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisateur n'est pas connecté, redirection
-
 ?>
 
 <section>
@@ -21,7 +20,7 @@ if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisa
 
             $query = $mysql_db -> query("SELECT * FROM users WHERE type_user = 'user'");
             if ($query -> num_rows > 0) : ?>
-                <table border="1">
+                <table id="tableuser" border="1">
                     <tr>
                         <th>Numéro</th>
                         <th>Pseudonyme</th>
@@ -37,7 +36,7 @@ if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisa
                 </table>
                 <button type="button" name="suppr_user" id="suppr_user">Supprimer</button>
         <?php else : ?>
-            <p>Aucun utilisateur n'est encore enregistré !</p>l
+            <p>Aucun utilisateur n'est enregistré !</p>
         <?php endif; ?>
     <?php else : ?>
         <h2>Page HOME de <strong>l'utilisateur</strong></h2>
@@ -55,7 +54,7 @@ if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisa
     if ($query -> num_rows == 0) : ?>
         <p>Vous n'avez aucun quiz</p>
     <?php else : ?>
-        <table border="1">
+        <table id="tablequiz" border="1">
             <tr>
                 <th>ID quiz</th>
                 <th>Titre</th>
@@ -63,12 +62,16 @@ if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisa
                 <th>Suppression</th>
             </tr>
             <?php while ($row = $query -> fetch_array(MYSQLI_ASSOC)) : ?>
-                <tr id="rowq_<?= $row['id_quiz'] ?>">
-                    <td><?= $row['id_quiz'] ?></td>
-                    <td><?= $row['titre_quiz'] ?></td>
-                    <td><button type="button" name="btn_choose_quiz" value="<?= $row['id_quiz'] ?>">Voir</td>
-                    <td><input type="checkbox" id="choix_quiz" value="<?= $row['id_quiz'] ?>"></td>
-                </tr>
+            <tr id="rowq_<?= $row['id_quiz'] ?>">
+                <td><?= $row['id_quiz'] ?></td>
+                <td><?= $row['titre_quiz'] ?></td>
+                <td>
+                    <form action="admin_quiz.php" method="post">
+                        <button type="submit" id="btn_get_quiz" name="btn_get_quiz" value="<?= $row['id_quiz'] ?>">Administrer
+                    </form>
+                </td>
+                <td><input type="checkbox" id="choix_quiz" value="<?= $row['id_quiz'] ?>"></td>
+            </tr>
             <?php endwhile; ?>
         </table>
         <button type="button" name="suppr_quiz" id="suppr_quiz">Supprimer</button>

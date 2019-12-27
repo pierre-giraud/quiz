@@ -1,9 +1,8 @@
 <?php
     include ('functions.php');
-
-    // Connexion à la base de données
-    $mysql_db = connexion_db();
-    echo "PENSER A REGROUPER LES SUPPRESSION<br>";
+    echo "A FAIRE<br>";
+    echo " --- LISTER EN PLUS TOUS LES QUIZ SUR LA PAGE ADMIN AVEC POSSIBILITE DE LE SUPPRIMER<br>";
+    echo " --- AJOUTER LA FONCTIONNALITE DES QUIZ PUBLICS<br>";
 ?>
 
 <!doctype html>

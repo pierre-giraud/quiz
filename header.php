@@ -20,9 +20,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
     <?php if (basename(dirname($_SERVER['PHP_SELF'])) == 'user') : ?>
+    <link rel="stylesheet" href="../css/style.css">
     <script type="text/javascript" src="../js/validation.js"></script>
     <script type="text/javascript" src="../js/functions.js"></script>
     <?php else : ?>
+    <link rel="stylesheet" href="css/style.css">
     <script type="text/javascript" src="js/validation.js"></script>
     <script type="text/javascript" src="js/functions.js"></script>
     <?php endif; ?>

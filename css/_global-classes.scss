@@ -1,0 +1,96 @@
+// Ce fichier contient toutes les classes scss qui sont utilisés de manières répétitives
+section {
+    color: black;
+    //padding: 4rem 0 6rem 0!important;
+    padding: 4rem 20px 6rem 20px!important;
+    @include set-font($size: 1.0em);
+
+    &.colored-background {
+        background-color: rgba(201, 17, 60, 0.15);
+    }
+
+    .has-light-bg {
+        background-color: rgba(0,0,0, .75);
+        color: white;
+        padding: 15px;
+
+        h1 {
+            color: rgb(214, 100, 127);
+
+            strong {
+                color: rgb(214, 100, 127);
+            }
+        }
+
+        strong {
+            color: white;
+        }
+    }
+
+    strong {
+        color: initial;
+    }
+}
+
+.flex-center-vertical {
+    align-items: center;
+}
+
+.flex-center-horizontal {
+    justify-content: center;
+}
+
+.flex-center-hv {
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-row-reverse {
+    flex-direction: row-reverse;
+}
+
+.padding-bottom {
+    padding-bottom: 10px;
+}
+
+.stop-scroll {
+    overflow: hidden;
+}
+
+.font-titles {
+    strong {
+        color: inherit;
+    }
+
+    h1 {
+        font-size: 1.8em;
+
+        @include mobile {
+            font-size: 1.6em;
+        }
+
+        font-weight: bold;
+        color: $main_color;
+    }
+
+    h2 {
+        font-size: 1.5em;
+    }
+
+    h3 {
+        font-size: 1.4em;
+    }
+
+    h4 {
+        font-size: 1.3em;
+    }
+
+    h5 {
+        font-size: 1.2em;
+    }
+
+    h6 {
+        font-size: 1.1em;
+    }
+}
+

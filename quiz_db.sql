@@ -143,7 +143,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `mdp_user` varchar(100) NOT NULL,
   `type_user` varchar(10) NOT NULL,
   UNIQUE KEY `index_id` (`id_user`)
-) ENGINE=MyISAM AUTO_INCREMENT=125 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=125 DEFAULT CHARSET=utf8;
 
 --
 -- Déchargement des données de la table `users`

@@ -1,7 +1,4 @@
 $(document).ready(function(){
-    let form_inscription = $('#inscription_form');
-    let nb_Questions = $('div .div_question').length; // Nombre de questions du quiz affiché
-
     // Fonction lors d'un clic pour supprimer un utilisateur
     $('#suppr_user').click(function(){
         let id_user = [];
@@ -56,12 +53,17 @@ $(document).ready(function(){
                     success: function () {
                         for (let i = 0; i < id_quiz.length; ++i) {
                             $('tr#rowq_' + id_quiz[i] + '').remove();
+                            if ($('tr#rowqa_' + id_quiz + '').length > 0) $('tr#rowqa_' + id_quiz[i] + '').remove();
                         }
 
                         // Si le tableau ne contient plus de quiz, on le supprime
-                        if ($('#tablequiz tr').length === 1) {
+                        if ($('#tablequiz tr').length === 2) {
                             $('#tablequiz').replaceWith("<p>Vous n'avez aucun quiz</p>");
-                            $('#suppr_quiz').remove();
+                        }
+
+                        if ($('#tablequizadmin tr').length === 1) {
+                            $('#tablequizadmin').replaceWith("<p>Aucun quiz enregistré</p>");
+                            $('#suppr_quiz_admin').remove();
                         }
                     },
                     error: function () {
@@ -91,12 +93,17 @@ $(document).ready(function(){
                     success: function () {
                         for (let i = 0; i < id_quiz.length; ++i) {
                             $('tr#rowqa_' + id_quiz[i] + '').remove();
+                            if ($('tr#rowq_' + id_quiz + '').length > 0) $('tr#rowq_' + id_quiz[i] + '').remove();
                         }
 
                         // Si le tableau ne contient plus de quiz, on le supprime
                         if ($('#tablequizadmin tr').length === 1) {
                             $('#tablequizadmin').replaceWith("<p>Aucun quiz enregistré</p>");
                             $('#suppr_quiz_admin').remove();
+                        }
+
+                        if ($('#tablequiz tr').length === 2) {
+                            $('#tablequiz').replaceWith("<p>Vous n'avez aucun quiz</p>");
                         }
                     },
                     error: function () {
@@ -123,14 +130,16 @@ $(document).ready(function(){
             data: {
                 id_quiz_set_public: {id_quiz, is_public}
             },
-            success: function (data) {
-                $('body').append('<p>' + data + '</p>')
+            success: function () {
+
             },
             error: function () {
                 alert('Erreur AJAX');
             }
         });
     });
+
+    let nb_Questions = $('div .div_question').length; // Nombre de questions du quiz affiché
 
     $('#btn_add_question').click(function(){
         nb_Questions++;
@@ -156,6 +165,17 @@ $(document).ready(function(){
         let labelrep4 = $("<label for='reponse4q" + nb_Questions + "'></label><br>").text("Réponse 4");
         let textareareponse4 = $("<textarea id='reponse4q" + nb_Questions + "' name='reponse4q" + nb_Questions + "'></textarea>");
 
+        let divRadioButtons = $("<div style='display: flex; align-items: center;'></div>");
+        let textRadios = $("<p></p>").text("Réponse correcte : ");
+        let radio1 = $("<input type='radio' id='rep1q" + nb_Questions + "' name='choix_repq" + nb_Questions + "' value='0' checked>");
+        let labelradio1 = $("<label for='rep1q" + nb_Questions + "'></label>").text("Réponse 1");
+        let radio2 = $("<input type='radio' id='rep2q" + nb_Questions + "' name='choix_repq" + nb_Questions + "' value='1'>");
+        let labelradio2 = $("<label for='rep2q" + nb_Questions + "'></label>").text("Réponse 2");
+        let radio3 = $("<input type='radio' id='rep3q" + nb_Questions + "' name='choix_repq" + nb_Questions + "' value='2'>");
+        let labelradio3 = $("<label for='rep3q" + nb_Questions + "'></label>").text("Réponse 3");
+        let radio4 = $("<input type='radio' id='rep4q" + nb_Questions + "' name='choix_repq" + nb_Questions + "' value='3'>");
+        let labelradio4 = $("<label for='rep4q" + nb_Questions + "'></label>").text("Réponse 4");
+
         col1row1.append(labelrep1, textareareponse1);
         col2row1.append(labelrep2, textareareponse2);
         col1row2.append(labelrep3, textareareponse3);
@@ -163,26 +183,53 @@ $(document).ready(function(){
         row1.append(col1row1, col2row1);
         row2.append(col1row2, col2row2);
         table.append(row1, row2);
-        divreponses.append(txttitre, table);
+        divRadioButtons.append(textRadios, radio1, labelradio1, radio2, labelradio2, radio3, labelradio3, radio4, labelradio4);
+        divreponses.append(txttitre, table, divRadioButtons);
         divenonce.append(labelquestion, textareaquestion);
 
         $('#questions').append(divenonce, divreponses);
     });
 
-    //validerFormulaire();
-
-    // Fonction utilisée à chaque modification du formulaire
-    form_inscription.change(function(){
-        validerFormulaire();
+    // Fonction utilisée à chaque tentative d'envoie du formulaire d'inscription
+    $('#inscription_form').submit(function(){
+        return isFormInscriptionOK();
     });
 
-    // Fonction utilisée à chaque tentative d'envoie du formulaire
-    form_inscription.submit(function(){
-        return isFormOK();
+    // Fonction utilisée à chaque tentative d'envoie du formulaire de création de quiz
+    $('#form_create_quiz').submit(function (){
+        alert(isFormQuizOK());
+        return isFormQuizOK();
     });
 
     // Cochage des cases dont le quiz est public si l'on se situe dans la page profil utilisateur
     if ($(location).attr('pathname').split('/').pop() === 'home.php') public_checkboxes();
+
+    let num_question_quiz = 0; // Numéro de la question actuellement en cours de traitement
+
+    // Fonction utilisée lors d'un clic sur le bouton "Commencer" pour effectuer un quiz
+    $('#btn_start_quiz').click(function () {
+        process_quiz(num_question_quiz, true);
+    });
+
+    // Fonction utilisée lors d'un clic sur une des réponses d'un quiz
+    $('table tr.trquestions td').click(function () {
+        let num_reponse = $(this).attr('id').substring(3);
+        console.log('num_question : ' + num_question_quiz);
+        console.log('num_reponse : ' + num_reponse);
+        $.ajax({
+            url: 'user/ajax.php',
+            type: 'post',
+            data: {
+                save_reponse: {num_question_quiz, num_reponse}
+            },
+            success: function () {
+                process_quiz(++num_question_quiz, false)
+            },
+            error: function () {
+                alert('Erreur AJAX');
+            }
+        });
+    });
 });
 
 // Fonction qui vérifie quel quiz est public
@@ -214,4 +261,63 @@ function public_checkboxes() {
             }
         });
     }
+}
+
+// Fonction de traitement de l'exécution d'un quiz
+function process_quiz(num_question, begin){
+    if (begin){
+        $('#btn_start_quiz').hide();
+        $('#tablequestion' + num_question).css('display', 'inline-block');
+    } else {
+        let question_suivante = $('#tablequestion' + num_question);
+        if (question_suivante.length > 0){
+            $('#tablequestion' + (num_question - 1)).css('display', 'none');
+            question_suivante.css('display', 'inline-block');
+        } else {
+            $('#question_quiz').css('display', 'none');
+            showResultatsQuiz();
+        }
+    }
+}
+
+function showResultatsQuiz() {
+    $('#resultats_quiz').css('display', 'inline-block');
+
+    $.ajax({
+        url: 'user/ajax.php',
+        type: 'post',
+        data: {
+            get_infos_quiz: true
+        },
+        success: function (results) {
+            let resultats = JSON.parse(results);
+            let nb_rep_correctes = 0;
+            let nb_rep = 0;
+            console.log(resultats);
+            console.log(resultats['quiz'])
+            console.log(resultats['resultats'])
+
+            for (nb_rep = 0; nb_rep < resultats['resultats'].length; nb_rep++){
+                console.log(resultats['resultats'][nb_rep]);
+                console.log('table tr.trquestionsres #repres' + resultats['resultats'][nb_rep]);
+                console.log("CORRECTE ? " + resultats['quiz']['questions'][nb_rep]['reponses'][resultats['resultats'][nb_rep]]['iscorrect_reponse']);
+
+                let reponse = $('#tablequestionres' + nb_rep + ' tr.trquestionsres #repres' + resultats['resultats'][nb_rep]);
+                let correctfield = $('#correctornot' + nb_rep);
+                if (resultats['quiz']['questions'][nb_rep]['reponses'][resultats['resultats'][nb_rep]]['iscorrect_reponse'] == 1){
+                    reponse.css('background-color', 'green');
+                    correctfield.text("Correct").css('color', 'green');
+                    nb_rep_correctes++;
+                } else {
+                    reponse.css('background-color', 'red');
+                    correctfield.text("Faux").css('color', 'red');
+                }
+            }
+
+            $('#nbreponsescorrectes').text('Nombre de réponses correctes : ' + nb_rep_correctes + ' / ' + nb_rep);
+        },
+        error: function () {
+            alert('Erreur AJAX');
+        }
+    });
 }

@@ -90,6 +90,7 @@ function connecter_user(){
 function deconnexion_user(){
     session_destroy();
     session_unset();
+
     if (basename(dirname($_SERVER['PHP_SELF'])) == 'user'){
         header('location: ../login.php');
     } else {
@@ -118,6 +119,7 @@ function create_quiz(){
     global $mysql_db;
     $id_quiz = 0;
     $id_question = 0;
+    $id_reponses = []; //Tableau utilisé pour modifier la base de données pour les réponses correctes
 
     // Parcours des données de $_POST
    foreach ($_POST as $key => $value){
@@ -128,19 +130,22 @@ function create_quiz(){
             $id_quiz = $mysql_db -> insert_id;
         // Remplissage de la table questions
         } elseif (strpos($key, "enonce") !== false){
-            $question = $mysql_db -> real_escape_string(htmlspecialchars(trim($value)));
+            $question = $mysql_db -> real_escape_string(trim($value));
             $mysql_db -> query("INSERT INTO questions (texte_question, id_quiz) VALUES ('$question'," . $id_quiz . ")");
             $id_question = $mysql_db -> insert_id;
         // Remplissage de la table reponses
         } elseif (strpos($key,"reponse") !== false) {
             if (trim($value) != ''){ // Si l'utilisateur a rempli ce champ
-                $reponse = $mysql_db -> real_escape_string(htmlspecialchars(trim($value)));
+                $reponse = $mysql_db -> real_escape_string(trim($value));
                 $mysql_db -> query("INSERT INTO reponses (texte_reponse, iscorrect_reponse, id_question) VALUES ('$reponse', 0," . $id_question . ")");
+                $id_reponses[] = $mysql_db -> insert_id;
             }
+        } elseif (strpos($key, "choix_repq") !== false){
+            $mysql_db -> query("UPDATE reponses SET iscorrect_reponse = 1 WHERE id_reponse = " . $id_reponses[$value]);
         }
     }
 
-    header('location: home.php');
+   header('location: home.php');
 }
 
 function update_quiz(){
@@ -149,6 +154,7 @@ function update_quiz(){
     $cpt_question = 0;
     $cpt_reponse = 0;
     $id_question = 0;
+    $id_reponses = [];
 
     // Parcours des données de $_POST
     foreach ($_POST as $key => $value){
@@ -158,7 +164,7 @@ function update_quiz(){
             $mysql_db -> query("UPDATE quiz SET titre_quiz = '$quizname' WHERE id_quiz = ".$id_quiz);
             // Remplissage de la table questions
         } elseif (strpos($key, "enonce") !== false){
-            $question = $mysql_db -> real_escape_string(htmlspecialchars(trim($value)));
+            $question = $mysql_db -> real_escape_string(trim($value));
 
             // Si la question existe, on la modifie sinon on l'ajoute
             if (isset($_SESSION['quiz_to_admin']['questions'][$cpt_question]['id_question'])){
@@ -173,7 +179,7 @@ function update_quiz(){
             // Remplissage de la table reponses
         } elseif (strpos($key,"reponse") !== false) {
             $num_question = $cpt_question - 1;
-            $reponse = $mysql_db -> real_escape_string(htmlspecialchars(trim($value)));
+            $reponse = $mysql_db -> real_escape_string(trim($value));
             if ($reponse != ''){ // Si l'utilisateur a rempli ce champ
                 // Vérification de l'existence de la réponse
                 if (isset($_SESSION['quiz_to_admin']['questions'][$num_question]['reponses'][$cpt_reponse]['id_reponse'])) {
@@ -192,36 +198,82 @@ function update_quiz(){
 
             $cpt_reponse++;
             if ($cpt_reponse == 4) $cpt_reponse = 0;
+        } elseif (strpos($key, "choix_repq") !== false){
+            $num_question = $cpt_question - 1;
+            // Remise à faux pour toutes les réponses
+            $mysql_db -> query("UPDATE reponses SET iscorrect_reponse = 0 WHERE id_question = " . $id_question);
+            // On met à vrai la bonne réponse
+            $mysql_db -> query("UPDATE reponses SET iscorrect_reponse = 1 WHERE id_reponse = " . $_SESSION['quiz_to_admin']['questions'][$num_question]['reponses'][$value]['id_reponse']);
         }
     }
 }
 
-function get_data_quiz($id){
-    global $mysql_db;
+function get_data_quiz($id, $admin_is_on){
+    /*global $mysql_db;
 
     // Récupération des données de la table quiz
     $result = $mysql_db -> query("SELECT id_quiz, titre_quiz, ispublic_quiz FROM quiz WHERE id_quiz = " . $id);
     if ($result -> num_rows > 0) {
         $_SESSION['quiz_to_admin'] = array();
         $_SESSION['quiz_to_admin']['quiz'] = $result->fetch_array(MYSQLI_ASSOC);
-    }
 
-    // Récupération des données de la table questions et réponses
-    $result = $mysql_db -> query("SELECT id_question, texte_question FROM questions WHERE id_quiz = " . $id);
-    if ($result -> num_rows > 0) {
-        $questions = [];
+        // Récupération des données de la table questions et réponses
+        $result = $mysql_db -> query("SELECT id_question, texte_question FROM questions WHERE id_quiz = " . $id);
+        if ($result -> num_rows > 0) {
+            $questions = [];
 
-        $cpt = 0;
-        while ($row = $result -> fetch_array(MYSQLI_ASSOC)){
-            $questions[$cpt] = $row;
+            $cpt = 0;
+            while ($row = $result -> fetch_array(MYSQLI_ASSOC)){
+                $questions[$cpt] = $row;
 
-            $res = $mysql_db -> query("SELECT * FROM reponses WHERE id_question = " . $row['id_question']);
-            while ($roww = $res -> fetch_array(MYSQLI_ASSOC)){
-                $questions[$cpt]['reponses'][] = $roww;
+                $res = $mysql_db -> query("SELECT * FROM reponses WHERE id_question = " . $row['id_question']);
+                while ($roww = $res -> fetch_array(MYSQLI_ASSOC)){
+                    $questions[$cpt]['reponses'][] = $roww;
+                }
+                $cpt++;
             }
-            $cpt++;
+
+            $_SESSION['quiz_to_admin']['questions'] = $questions;
+        }
+    }*/
+    global $mysql_db;
+
+    $quiz = array();
+    $return = NULL;
+
+    // Récupération des données de la table quiz
+    $result = $mysql_db -> query("SELECT id_quiz, titre_quiz, ispublic_quiz FROM quiz WHERE id_quiz = " . $id);
+    if ($result -> num_rows > 0) {
+        //$quiz['quiz_to_admin'] = array();
+        $quiz['quiz'] = $result->fetch_array(MYSQLI_ASSOC);
+
+        // Récupération des données de la table questions
+        $result = $mysql_db -> query("SELECT id_question, texte_question FROM questions WHERE id_quiz = " . $id . " ORDER BY id_question");
+        if ($result -> num_rows > 0) {
+            $questions = [];
+
+            $cpt = 0;
+            while ($row = $result -> fetch_array(MYSQLI_ASSOC)){
+                $questions[$cpt] = $row;
+
+                // Récupération des données de la table reponses
+                $res = $mysql_db -> query("SELECT * FROM reponses WHERE id_question = " . $row['id_question'] . " ORDER BY id_reponse");
+                while ($roww = $res -> fetch_array(MYSQLI_ASSOC)){
+                    $questions[$cpt]['reponses'][] = $roww;
+                }
+                $cpt++;
+            }
+
+            $quiz['questions'] = $questions;
         }
 
-        $_SESSION['quiz_to_admin']['questions'] = $questions;
+        // Si la fonction est appelée pour une administration
+        if ($admin_is_on){
+            $_SESSION['quiz_to_admin'] = $quiz;
+        } else { // Si non, on vérifie que le quiz est public
+            if ($quiz['quiz']['ispublic_quiz']) $return = $quiz;
+        }
     }
+
+    return $return;
 }

@@ -1,5 +1,9 @@
 <?php
     include ('functions.php');
+    echo "A FAIRE<br>";
+    echo "--- POSSIBILITE DE CHOISIR L'AFFICHAGE DES RESULTATS<br>";
+    echo "--- STATISTIQUES SUR LES QUIZ<br>";
+    echo "--- AJOUTER LE CSS<br>";
 ?>
 
 <!doctype html>
@@ -43,7 +47,8 @@
                 <a href="../index.php">Accueil</a>
                 <?php endif; ?>
             <?php else : ?>
-            <p><a href="login.php">Se connecter</a></p>
+            <a href="login.php">Se connecter</a><br>
+            <a href="index.php">Accueil</a>
             <?php endif; ?>
         </div>
         <hr>

@@ -34,6 +34,7 @@ if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisa
                     </tr>
                 <?php endwhile; ?>
                 </table>
+                <br>
                 <button type="button" name="suppr_user" id="suppr_user">Supprimer</button>
         <?php else : ?>
             <p>Aucun utilisateur n'est enregistré !</p>
@@ -49,7 +50,7 @@ if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisa
     <?php
 
     global $mysql_db;
-    $query = $mysql_db -> query("SELECT * FROM quiz WHERE id_user =" . $_SESSION['user']->getId());
+    $query = $mysql_db -> query("SELECT * FROM quiz WHERE id_user =" . $_SESSION['user']->getId() . " ORDER BY id_quiz");
 
     if ($query -> num_rows == 0) : ?>
         <p>Vous n'avez aucun quiz</p>
@@ -68,7 +69,7 @@ if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisa
                 <td><?= $row['titre_quiz'] ?></td>
                 <td>
                     <form action="admin_quiz.php" method="post">
-                        <button type="submit" id="btn_get_quiz" name="btn_get_quiz" value="<?= $row['id_quiz'] ?>">Administrer
+                        <button type="submit" id="btn_get_quiz<?= $row['id_quiz'] ?>" name="btn_get_quiz" value="<?= $row['id_quiz'] ?>">Administrer
                     </form>
                 </td>
                 <td><input type="checkbox" id="pquiz_<?= $row['id_quiz'] ?>" name="choix_public" value="<?= $row['id_quiz'] ?>"</td>
@@ -82,7 +83,7 @@ if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisa
             </tr>
         </table>
     <?php endif; ?>
-    <br><br>
+    <br>
     <form action="create_quiz.php" method="post">
         <button type="submit" name="btn_create_quiz">Créer un quiz</button>
     </form>
@@ -95,7 +96,7 @@ if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisa
     <?php
 
     global $mysql_db;
-    $query = $mysql_db -> query("SELECT * FROM quiz");
+    $query = $mysql_db -> query("SELECT * FROM quiz ORDER BY id_quiz");
 
     if ($query -> num_rows == 0) : ?>
         <p>Aucun quiz enregistré</p>
@@ -120,6 +121,7 @@ if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisa
                 </tr>
             <?php endwhile; ?>
         </table>
+        <br>
         <button type="button" name="suppr_quiz_admin" id="suppr_quiz_admin">Supprimer</button>
     <?php endif; ?>
 </section>

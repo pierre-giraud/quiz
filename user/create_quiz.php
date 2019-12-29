@@ -20,7 +20,7 @@ if (isset($_POST['btn_confirm_creation_quiz'])) create_quiz();
         <br>
 
         <div id="questions">
-            <div id="enonce_question1">
+            <div class="div_question" id="enonce_question1">
                 <label for="enonce1">Question 1</label><br>
                 <textarea id="enonce1" name="enonce1"></textarea>
             </div>
@@ -49,6 +49,22 @@ if (isset($_POST['btn_confirm_creation_quiz'])) create_quiz();
                         </td>
                     </tr>
                 </table>
+
+                <div style="display: flex; align-items: center;">
+                    <p>Réponse correcte : </p>
+
+                    <input type="radio" id="rep1q1" name="choix_repq1" value="0" checked>
+                    <label for="rep1q1">Réponse 1</label>
+
+                    <input type="radio" id="rep2q1" name="choix_repq1" value="1">
+                    <label for="rep2q1">Réponse 2</label>
+
+                    <input type="radio" id="rep3q1" name="choix_repq1" value="2">
+                    <label for="rep3q1">Réponse 3</label>
+
+                    <input type="radio" id="rep4q1" name="choix_repq1" value="3">
+                    <label for="rep4q1">Réponse 4</label>
+                </div>
             </div>
         </div>
 

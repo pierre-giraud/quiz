@@ -34,12 +34,10 @@ if (isset($_POST['con_btn'])){
             <?php endif ?>
         </div>
 
-        <div>
-            <button type="submit" name="con_btn">Se connecter</button>
-        </div>
-
-        <p>Pas encore membre ? <a href="inscription.php">Inscrivez-vous !</a></p>
+        <button type="submit" name="con_btn">Se connecter</button>
     </form>
+    <p>Pas encore membre ? <a href="inscription.php">Inscrivez-vous !</a></p>
+    <a href="index.php">Accueil</a>
 </section>
 
 <?php include 'footer.php'; ?>

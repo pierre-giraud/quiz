@@ -39,3 +39,18 @@ if (isset($_POST['id_quiz_set_public'])) {
         $result = $mysql_db -> query("UPDATE quiz SET ispublic_quiz = ".$is_public." WHERE id_quiz = '$id_quiz'");
     }
 }
+
+if (isset($_POST['save_reponse'])) {
+    $num_question = $_POST['save_reponse']['num_question_quiz'];
+    $num_reponse = $_POST['save_reponse']['num_reponse'];
+
+    $_SESSION['result_quiz'][$num_question] = $num_reponse;
+}
+
+if (isset($_POST['get_infos_quiz'])) {
+    $result['resultats'] = $_SESSION['result_quiz'];
+    $result['quiz'] = $_SESSION['quiz_to_do'];
+    //echo json_encode($_SESSION['result_quiz']);
+    //echo json_encode($_SESSION['quiz_to_do']);
+    echo json_encode($result);
+}

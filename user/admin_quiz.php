@@ -7,9 +7,9 @@ include('../header.php');
 if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisateur n'est pas connecté, redirection
 if (isset($_POST['btn_confirm_modif_quiz'])) update_quiz();
 // Si un bouton d'administration de quiz est utilisé
-if (isset($_POST['btn_get_quiz'])) get_data_quiz($_POST['btn_get_quiz']);
+if (isset($_POST['btn_get_quiz'])) get_data_quiz($_POST['btn_get_quiz'], true);
 // Si on rafraichit la page et qu'un quiz a été sélectionné
-if (isset($_SESSION['quiz_to_admin'])) get_data_quiz($_SESSION['quiz_to_admin']['quiz']['id_quiz']);
+if (isset($_SESSION['quiz_to_admin'])) get_data_quiz($_SESSION['quiz_to_admin']['quiz']['id_quiz'], true);
 
 // Récupération des données concernant le quiz en question
 if (isset($_SESSION['quiz_to_admin'])) : ?>
@@ -58,6 +58,21 @@ if (isset($_SESSION['quiz_to_admin'])) : ?>
                                 </td>
                             </tr>
                         </table>
+                        <div style="display: flex; align-items: center;">
+                            <p>Réponse correcte : </p>
+
+                            <input type="radio" id="rep1q<?= $num_q ?>" name="choix_repq<?= $num_q ?>" value="0" <?php if ($_SESSION['quiz_to_admin']['questions'][$i]['reponses'][0]['iscorrect_reponse'] == 1) : ?>checked<?php endif; ?>>
+                            <label for="rep1q<?= $num_q ?>">Réponse 1</label>
+
+                            <input type="radio" id="rep2q<?= $num_q ?>" name="choix_repq<?= $num_q ?>" value="1" <?php if ($_SESSION['quiz_to_admin']['questions'][$i]['reponses'][1]['iscorrect_reponse'] == 1) : ?>checked<?php endif; ?>>
+                            <label for="rep2q<?= $num_q ?>">Réponse 2</label>
+
+                            <input type="radio" id="rep3q<?= $num_q ?>" name="choix_repq<?= $num_q ?>" value="2" <?php if (isset($_SESSION['quiz_to_admin']['questions'][$i]['reponses'][2]) && $_SESSION['quiz_to_admin']['questions'][$i]['reponses'][2]['iscorrect_reponse'] == 1) : ?>checked<?php endif; ?>>
+                            <label for="rep3q<?= $num_q ?>">Réponse 3</label>
+
+                            <input type="radio" id="rep4q<?= $num_q ?>" name="choix_repq<?= $num_q ?>" value="3" <?php if (isset($_SESSION['quiz_to_admin']['questions'][$i]['reponses'][3]) && $_SESSION['quiz_to_admin']['questions'][$i]['reponses'][3]['iscorrect_reponse'] == 1) : ?>checked<?php endif; ?>>
+                            <label for="rep4q<?= $num_q ?>">Réponse 4</label>
+                        </div>
                     </div>
                 <?php endfor; ?>
             </div>
@@ -69,8 +84,6 @@ if (isset($_SESSION['quiz_to_admin'])) : ?>
                 <button type="submit" name="btn_confirm_modif_quiz">Modifier</button>
             </div>
         </form>
-
-        <?php var_dump($_SESSION['quiz_to_admin']) ?>
     </section>
 <?php else :
     header('location: home.php');

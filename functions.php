@@ -1,6 +1,5 @@
 <?php
 
-include ('model/Utilisateur.php');
 include ('constants.php');
 
 // Démarre ou continue une session
@@ -50,7 +49,6 @@ function enregistrer_user(){
 
         $user_id = $mysql_db -> insert_id;
         $_SESSION['user'] = getUserById($user_id);
-        $_SESSION['logged'] = "Vous êtes maintenant connecté !";
         unset($_SESSION['bad_login']);
         header('location: user/home.php');
     } else {
@@ -106,13 +104,13 @@ function getUserById($id){
     global $mysql_db;
 
     $result = $mysql_db -> query("SELECT id_user, nom_user, type_user FROM users WHERE id_user = " . $id);
-    $user_instance = NULL;
+    /*$user_instance = NULL;
 
     if ($obj = $result -> fetch_object()){
         $user_instance = new Utilisateur($obj->id_user, $obj->nom_user, $obj->type_user);
-    }
+    }*/
 
-    return $user_instance;
+    return $result -> fetch_array(MYSQLI_ASSOC);
 }
 
 function create_quiz(){
@@ -126,7 +124,7 @@ function create_quiz(){
         // Remplissage de la table quiz
         if ($key == "quizname") {
             $quizname = $mysql_db -> real_escape_string(trim($value));
-            $mysql_db -> query("INSERT INTO quiz (titre_quiz, ispublic_quiz, id_user) VALUES ('$quizname', 0," . $_SESSION['user']->getId() . ")");
+            $mysql_db -> query("INSERT INTO quiz (titre_quiz, ispublic_quiz, id_user) VALUES ('$quizname', 0," . $_SESSION['user']['id_user'] . ")");
             $id_quiz = $mysql_db -> insert_id;
         // Remplissage de la table questions
         } elseif (strpos($key, "enonce") !== false){

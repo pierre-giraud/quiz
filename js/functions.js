@@ -118,6 +118,7 @@ $(document).ready(function(){
     $('#btn_set_public').click(function () {
         let id_quiz = [];
         let is_public = [];
+
         // Récupération des identifiants des quiz
         $("input[name='choix_public']").each(function(i){
             id_quiz[i] = $(this).val();
@@ -131,12 +132,21 @@ $(document).ready(function(){
                 id_quiz_set_public: {id_quiz, is_public}
             },
             success: function () {
-
+                let popup = $('#popup');
+                popup.removeClass('popup-invisible');
+                popup.addClass('popup-visible');
             },
             error: function () {
                 alert('Erreur AJAX');
             }
         });
+    });
+
+    // Clic sur la fermeture de la popup
+    $('#del-popup').click(function () {
+        let popup = $('#popup');
+        popup.removeClass('popup-visible');
+        popup.addClass('popup-invisible');
     });
 
     let nb_Questions = $('div .div_question').length; // Nombre de questions du quiz affiché
@@ -212,10 +222,9 @@ $(document).ready(function(){
     });
 
     // Fonction utilisée lors d'un clic sur une des réponses d'un quiz
-    $('table tr.trquestions td').click(function () {
+    $('table tr.trreponses td').click(function () {
         let num_reponse = $(this).attr('id').substring(3);
-        console.log('num_question : ' + num_question_quiz);
-        console.log('num_reponse : ' + num_reponse);
+
         $.ajax({
             url: 'user/ajax.php',
             type: 'post',
@@ -228,6 +237,28 @@ $(document).ready(function(){
             error: function () {
                 alert('Erreur AJAX');
             }
+        });
+    });
+
+    // Clic sur une ligne du tableau d'utilisateurs (mode admin)
+    $('tr.truser').click(function (event) {
+        if (event.target.type !== 'checkbox') {
+            $(':checkbox', this).trigger('click');
+        }
+    });
+
+    // Clic sur une ligne du tableau de quiz (mode admin)
+    $('tr.trquiz').click(function (event) {
+        if (event.target.type !== 'checkbox') {
+            $(':checkbox', this).trigger('click');
+        }
+    });
+
+    // Recherche d'un quiz sur la page d'accueil
+    $("#searchquiz").on("keyup", function() {
+        let word = $(this).val().toLowerCase();
+        $("a.panel-block").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(word) > -1)
         });
     });
 });
@@ -281,7 +312,7 @@ function process_quiz(num_question, begin){
 }
 
 function showResultatsQuiz() {
-    $('#resultats_quiz').css('display', 'inline-block');
+    $('#resultats_quiz').css('display', 'block');
 
     $.ajax({
         url: 'user/ajax.php',
@@ -304,8 +335,8 @@ function showResultatsQuiz() {
 
                 let reponse = $('#tablequestionres' + nb_rep + ' tr.trquestionsres #repres' + resultats['resultats'][nb_rep]);
                 let correctfield = $('#correctornot' + nb_rep);
-                if (resultats['quiz']['questions'][nb_rep]['reponses'][resultats['resultats'][nb_rep]]['iscorrect_reponse'] == 1){
-                    reponse.css('background-color', 'green');
+                if (resultats['quiz']['questions'][nb_rep]['reponses'][resultats['resultats'][nb_rep]]['iscorrect_reponse'] === '1'){
+                    reponse.css('background-color', '#3ec46d');
                     correctfield.text("Correct").css('color', 'green');
                     nb_rep_correctes++;
                 } else {

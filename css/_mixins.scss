@@ -1,7 +1,7 @@
 // Ce fichier contient divers fonctions (mixins) utilisés dans le projet
 
 // Mixin pour la police d'écriture
-@mixin set-font($family: 'Verdana', $weight: normal, $style: normal, $size: 1.0) {
+@mixin set-font($family: 'Arial', $weight: normal, $style: normal, $size: 1.0) {
     font-family: $family, serif;
     font-style: $style;
     font-weight: $weight;
@@ -13,51 +13,6 @@
     background-color: $background;
     width: $width;
     z-index: $z-index;
-}
-
-// Initialisation des menus
-@mixin init-menu($ml-start: 0, $ml-end: 0, $v-start: visible, $transition: all) {
-    @include touch {
-        height: 0;
-
-        li {
-            opacity: 0;
-            margin-left: $ml-start;
-            transition: $transition;
-            visibility: $v-start;
-
-            &.is-shown {
-                opacity: 1;
-                margin-left: $ml-end;
-                transition: $transition;
-                visibility: visible;
-            }
-        }
-    }
-
-    @include desktop {
-        display: flex;
-        width: 100%;
-        justify-content: center;
-    }
-}
-
-// Initialisation des menus-items
-@mixin init-menu-items($text_color, $nav_color, $hover_text_color, $hover_bg_color, $padding) {
-    @include set-colors($text_color, $nav_color);
-    display: flex;
-    text-align: center;
-    align-items: center;
-    padding: $padding;
-    height: 100%;
-
-    /* La souris sort */
-    transition: all .3s ease-in-out;
-
-    /* La souris entre */
-    &:hover {
-        @include set-colors($hover_text_color, $hover_bg_color);
-    }
 }
 
 // Définit une position
@@ -79,25 +34,4 @@
 @mixin set-colors($color: none, $background: none) {
     color: $color;
     background-color: $background;
-}
-
-// Définit la taille des images de la tranche Liste Images
-@mixin set-size-img-list($img-max-w, $img-max-h, $img-mmax-w, $img-mmax-h, $p-max-w, $p-mmax-w) {
-    img {
-        max-width: $img-max-w;
-        max-height: $img-max-h;
-
-        @include mobile {
-            max-width:  $img-mmax-w;
-            max-height: $img-mmax-h;
-        }
-    }
-
-    p {
-        width: $p-max-w;
-
-        @include mobile {
-            max-width: $p-mmax-w;
-        }
-    }
 }

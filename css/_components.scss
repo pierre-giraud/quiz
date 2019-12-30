@@ -1,0 +1,88 @@
+.header-container {
+  margin-left: 5px;
+
+  .name-user-div {
+    display: flex;
+    align-items: center;
+
+    p {
+      margin-right: 10px;
+    }
+  }
+}
+
+.table-container{
+  height: 300px;
+  overflow: auto;
+  border: 1px solid lightgrey;
+  background-color: white;
+
+  .table {
+    cursor: default;
+
+    .dataline:hover {
+      background-color: #d5d5d5 !important;
+    }
+  }
+}
+
+.popup-visible {
+  position: fixed;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.popup-invisible {
+  display: none;
+}
+
+input[type=checkbox] {
+  @include touch{
+    -ms-transform: scale(2); /* IE */
+    -moz-transform: scale(2); /* FF */
+    -webkit-transform: scale(2); /* Safari and Chrome */
+    -o-transform: scale(2); /* Opera */
+    transform: scale(2);
+    padding: 10px;
+  }
+}
+
+#liste-quiz {
+  height: 250px;
+  overflow: auto;
+}
+
+#question_quiz table {
+  cursor: default;
+
+  .trreponses td{
+    cursor: pointer;
+
+    &:hover {
+      background-color: #3ec46d;
+    }
+  }
+}
+
+.table-result {
+  display: initial;
+}
+
+/*button {
+  background-color: $turquoise;
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  -webkit-transition-duration: 0.4s;
+  transition-duration: 0.4s;
+  cursor: pointer;
+}*/

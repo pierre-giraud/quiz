@@ -22,7 +22,7 @@ if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisa
 <?php if ($_SESSION['user']['type_user'] === 'admin') : ?>
 <section class="section font-titles has-colored-bg has-margin-top">
     <div class="container is-flex flex-center-hv">
-        <div>
+        <div class="responsive-content no-border">
             <h3>Utilisateurs enregistrés</h3>
             <?php
             global $mysql_db;
@@ -30,7 +30,7 @@ if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisa
             $query = $mysql_db -> query("SELECT * FROM users WHERE type_user = 'user'");
             if ($query -> num_rows > 0) : ?>
                 <div class="table-container">
-                    <table class="table is-bordered is-narrow is-hoverable" id="tableuser">
+                    <table class="table is-bordered is-narrow is-hoverable is-fullwidth" id="tableuser">
                         <tr>
                             <th>Numéro</th>
                             <th>Pseudonyme</th>
@@ -60,9 +60,10 @@ if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisa
     </section>
 <?php endif ?>
 
-<section class="section font-titles">
+
+<section class="section font-titles <?= $_SESSION['user']['type_user'] === 'user' ? 'has-margin-top' : '' ?>">
     <div class="container is-flex flex-center-hv">
-        <div>
+        <div class="responsive-content no-border">
             <h3>Vos quiz</h3>
 
             <?php
@@ -74,7 +75,7 @@ if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisa
                 <p>Vous n'avez aucun quiz</p>
             <?php else : ?>
                 <div class="table-container">
-                    <table table class="table is-bordered is-narrow is-hoverable" id="tablequiz">
+                    <table table class="table is-bordered is-narrow is-hoverable is-fullwidth" id="tablequiz">
                         <tr>
                             <th>ID quiz</th>
                             <th>Titre</th>
@@ -119,7 +120,7 @@ if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisa
 <?php if ($_SESSION['user']['type_user'] === 'admin') : ?>
 <section class="section font-titles has-colored-bg">
     <div class="container is-flex flex-center-hv">
-        <div class="is-bordered">
+        <div class="responsive-content no-border">
             <h3>Quiz enregistrés</h3>
 
             <?php
@@ -131,7 +132,7 @@ if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisa
                 <p>Aucun quiz enregistré</p>
             <?php else : ?>
                 <div class="table-container">
-                    <table class="table is-bordered is-narrow is-hoverable" id="tablequizadmin">
+                    <table class="table is-bordered is-narrow is-hoverable is-fullwidth" id="tablequizadmin">
                         <tr>
                             <th>ID quiz</th>
                             <th>Titre</th>

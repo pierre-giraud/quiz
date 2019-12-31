@@ -7,7 +7,6 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <?php if (isset($page_title)) : ?>
             <title><?php echo $page_title?></title>
     <?php else : ?>
@@ -29,8 +28,8 @@
 </head>
 
 <body>
+<?php if (basename($_SERVER['PHP_SELF']) != 'login.php' && basename($_SERVER['PHP_SELF']) != 'inscription.php') : ?>
     <header>
-        <?php if (basename($_SERVER['PHP_SELF']) != 'login.php' && basename($_SERVER['PHP_SELF']) != 'inscription.php') : ?>
         <div class="header-container">
             <?php if (isset($_SESSION['user'])) : ?>
             <div class="name-user-div">
@@ -41,17 +40,22 @@
             </div>
                 <?php if (basename($_SERVER['PHP_SELF']) != 'home.php') : ?>
                     <?php if (basename(dirname($_SERVER['PHP_SELF'])) == 'user') : ?>
-                        <a href="home.php">Home</a>
+                        <a class="button is-link" href="home.php">Home</a>
                     <?php else : ?>
-                        <a href="user/home.php">Home</a>
+                        <a class="button is-link" href="user/home.php">Home</a>
                     <?php endif; ?>
+                    <?php if(strpos('quiz.php', basename($_SERVER['PHP_SELF'])) !== false) : ?>
+                        <a class="button is-link" href="index.php">Accueil</a>
+                    <?php endif ?>
                 <?php else : ?>
-                <a href="../index.php">Accueil</a>
+                <a class="button is-link" href="../index.php">Accueil</a>
                 <?php endif; ?>
             <?php else : ?>
-            <a href="login.php">Se connecter</a><br>
-            <a href="index.php">Accueil</a>
+            <div class="buttons">
+                <a class="button is-link" href="login.php">Se connecter</a><br>
+                <a class="button is-link" href="index.php">Accueil</a>
+            </div>
             <?php endif; ?>
         </div>
-        <?php endif; ?>
     </header>
+<?php endif; ?>

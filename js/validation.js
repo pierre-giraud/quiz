@@ -10,9 +10,15 @@ function validerFormulaireInscription(){
 
     // Nom d'utilisateur
     if ($.trim(username.val()).length < 4 || $.trim(username.val()).length > 25){
-        username.addClass('error');
+        username.addClass('is-danger');
+        username.addClass("error");
+        username.removeClass('is-success');
+        $('#msg-incorrect-username').removeClass('hidden-msg-w');
     } else {
-        username.removeClass('error');
+        username.removeClass('is-danger');
+        username.removeClass("error");
+        username.addClass('is-success');
+        $('#msg-incorrect-username').addClass('hidden-msg-w');
     }
 
     // Mot de passe
@@ -20,9 +26,11 @@ function validerFormulaireInscription(){
 
     // Confirmation du mot de passe
     if ($.trim(password2.val()) < 1 || password2.val() !== password1.val()){
-        password2.addClass('error');
+        password2.addClass('is-danger');
+        password2.addClass("error");
     } else {
-        password2.removeClass('error');
+        password2.removeClass('is-danger');
+        password2.removeClass("error");
     }
 }
 
@@ -36,9 +44,16 @@ function validerFormulaireQuiz() {
 
     toggleClassError(quizname);
 
+    /*if ($.trim(quizname.val()) < 1) {
+        //$('#msg-incorrect-quizname').removeClass('hidden-msg-w');
+        quizname.parent().siblings().removeClass('hidden-msg-w');
+    } else {
+        //$('#msg-incorrect-quizname').addClass('hidden-msg-w');
+        quizname.parent().siblings().addClass('hidden-msg-w');
+    }*/
+
     // Textareas
     $('form#form_create_quiz textarea').each(function () {
-        console.log($(this).attr('name'));
         if ($(this).attr('name').indexOf('enonce') >= 0){
             toggleClassError($(this));
         } else if ($(this).attr('name').indexOf('reponse1') >= 0) {
@@ -111,8 +126,14 @@ function isFormQuizOK(){
 
 function toggleClassError(elem){
     if ($.trim(elem.val()).length < 1){
+        elem.addClass("is-danger");
+        elem.removeClass("is-success");
         elem.addClass("error");
+        elem.parent().siblings().removeClass('hidden-msg-w');
     } else {
+        elem.removeClass("is-danger");
+        elem.addClass("is-success");
         elem.removeClass("error");
+        elem.parent().siblings().addClass('hidden-msg-w');
     }
 }

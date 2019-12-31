@@ -22,7 +22,7 @@ $(document).ready(function(){
 
                         // Si il n'y a plus d'utilisateurs enregistrés, on supprime le tableau
                         if ($('#tableuser tr').length === 1){
-                            $('#tableuser').replaceWith("<p>Vous n'avez aucun quiz</p>");
+                            $('#tableuser').parent().replaceWith("<p>Aucun utilisateur n'est enregistré !</p>");
                             $('#suppr_user').remove();
                         }
                     },
@@ -58,11 +58,11 @@ $(document).ready(function(){
 
                         // Si le tableau ne contient plus de quiz, on le supprime
                         if ($('#tablequiz tr').length === 2) {
-                            $('#tablequiz').replaceWith("<p>Vous n'avez aucun quiz</p>");
+                            $('#tablequiz').parent().replaceWith("<p>Vous n'avez aucun quiz</p>");
                         }
 
                         if ($('#tablequizadmin tr').length === 1) {
-                            $('#tablequizadmin').replaceWith("<p>Aucun quiz enregistré</p>");
+                            $('#tablequizadmin').parent().replaceWith("<p>Aucun quiz enregistré</p>");
                             $('#suppr_quiz_admin').remove();
                         }
                     },
@@ -98,12 +98,12 @@ $(document).ready(function(){
 
                         // Si le tableau ne contient plus de quiz, on le supprime
                         if ($('#tablequizadmin tr').length === 1) {
-                            $('#tablequizadmin').replaceWith("<p>Aucun quiz enregistré</p>");
+                            $('#tablequizadmin').parent().replaceWith("<p>Aucun quiz enregistré</p>");
                             $('#suppr_quiz_admin').remove();
                         }
 
                         if ($('#tablequiz tr').length === 2) {
-                            $('#tablequiz').replaceWith("<p>Vous n'avez aucun quiz</p>");
+                            $('#tablequiz').parent().replaceWith("<p>Vous n'avez aucun quiz</p>");
                         }
                     },
                     error: function () {
@@ -153,51 +153,72 @@ $(document).ready(function(){
 
     $('#btn_add_question').click(function(){
         nb_Questions++;
-        let divenonce = $("<div id='enonce_question" + nb_Questions + "'></div>");
-        let labelquestion = "<br><label for='enonce" + nb_Questions + "'>Question " + nb_Questions + "</label><br>";
-        let textareaquestion = "<textarea id='enonce" + nb_Questions + "' name='enonce" + nb_Questions + "'></textarea>";
+
+        let divenonce = $("<div class='field div_question' id='enonce_question" + nb_Questions + "'></div>");
+        let divcontrolenonce = $("<div class='control'></div>");
+        let labelquestion = "<label class='label' for='enonce" + nb_Questions + "'>Question " + nb_Questions + "</label>";
+        let textareaquestion = "<textarea class='textarea is-primary is-small' id='enonce" + nb_Questions + "' name='enonce" + nb_Questions + "' placeholder='Texte de la question 1 ...'></textarea>";
+        let phrasewarningenonce = $("<p class='hidden-msg-w help is-danger'>Une question doit avoir un énoncé</p>");
 
         let divreponses = $("<div id='reponses_question" + nb_Questions + "'></div>");
-        let txttitre = $("<p></p>").text("Réponses à la question " + nb_Questions);
-        let table = $("<table></table>");
-        let row1 = $("<tr></tr>");
-        let col1row1 = $("<td></td>");
-        let labelrep1 = $("<label for='reponse1q" + nb_Questions + "'></label><br>").text("Réponse 1");
-        let textareareponse1 = $("<textarea id='reponse1q" + nb_Questions + "' name='reponse1q" + nb_Questions + "'></textarea>");
-        let col2row1 = $("<td></td>");
-        let labelrep2 = $("<label for='reponse2q" + nb_Questions + "'></label><br>").text("Réponse 2");
-        let textareareponse2 = $("<textarea id='reponse2q" + nb_Questions + "' name='reponse2q" + nb_Questions + "'></textarea>");
-        let row2 = $("<tr></tr>");
-        let col1row2 = $("<td></td>");
-        let labelrep3 = $("<label for='reponse3q" + nb_Questions + "'></label><br>").text("Réponse 3");
-        let textareareponse3 = $("<textarea id='reponse3q" + nb_Questions + "' name='reponse3q" + nb_Questions + "'></textarea>");
-        let col2row2 = $("<td></td>");
-        let labelrep4 = $("<label for='reponse4q" + nb_Questions + "'></label><br>").text("Réponse 4");
-        let textareareponse4 = $("<textarea id='reponse4q" + nb_Questions + "' name='reponse4q" + nb_Questions + "'></textarea>");
+        let txttitre = $("<br><h4>Réponses à la question " + nb_Questions + "</h4><br>");
 
-        let divRadioButtons = $("<div style='display: flex; align-items: center;'></div>");
-        let textRadios = $("<p></p>").text("Réponse correcte : ");
-        let radio1 = $("<input type='radio' id='rep1q" + nb_Questions + "' name='choix_repq" + nb_Questions + "' value='0' checked>");
-        let labelradio1 = $("<label for='rep1q" + nb_Questions + "'></label>").text("Réponse 1");
-        let radio2 = $("<input type='radio' id='rep2q" + nb_Questions + "' name='choix_repq" + nb_Questions + "' value='1'>");
-        let labelradio2 = $("<label for='rep2q" + nb_Questions + "'></label>").text("Réponse 2");
-        let radio3 = $("<input type='radio' id='rep3q" + nb_Questions + "' name='choix_repq" + nb_Questions + "' value='2'>");
-        let labelradio3 = $("<label for='rep3q" + nb_Questions + "'></label>").text("Réponse 3");
-        let radio4 = $("<input type='radio' id='rep4q" + nb_Questions + "' name='choix_repq" + nb_Questions + "' value='3'>");
-        let labelradio4 = $("<label for='rep4q" + nb_Questions + "'></label>").text("Réponse 4");
+        let divfieldrep1 = $("<div class='field'></div>");
+        let divcontrolrep1 = $("<div class='control'></div>");
+        let labelrep1 = $("<label class='label' for='reponse1q" + nb_Questions + "'>Réponse 1</label>");
+        let textareareponse1 = $("<textarea class='textarea is-info is-small' id='reponse1q" + nb_Questions + "' name='reponse1q" + nb_Questions + "' placeholder='Texte de la réponse 1 ...'></textarea>");
+        let phrasewarningrep1 = $("<p class='hidden-msg-w help is-danger'>Cette réponse ne doit pas être vide</p>");
 
-        col1row1.append(labelrep1, textareareponse1);
-        col2row1.append(labelrep2, textareareponse2);
-        col1row2.append(labelrep3, textareareponse3);
-        col2row2.append(labelrep4, textareareponse4);
-        row1.append(col1row1, col2row1);
-        row2.append(col1row2, col2row2);
-        table.append(row1, row2);
-        divRadioButtons.append(textRadios, radio1, labelradio1, radio2, labelradio2, radio3, labelradio3, radio4, labelradio4);
-        divreponses.append(txttitre, table, divRadioButtons);
-        divenonce.append(labelquestion, textareaquestion);
+        let divfieldrep2 = $("<div class='field'></div>");
+        let divcontrolrep2 = $("<div class='control'></div>");
+        let labelrep2 = $("<label class='label' for='reponse2q" + nb_Questions + "'>Réponse 2</label>");
+        let textareareponse2 = $("<textarea class='textarea is-info is-small' id='reponse2q" + nb_Questions + "' name='reponse2q" + nb_Questions + "' placeholder='Texte de la réponse 2 ...'></textarea>");
+        let phrasewarningrep2 = $("<p class='hidden-msg-w help is-danger'>Cette réponse ne doit pas être vide</p>");
 
-        $('#questions').append(divenonce, divreponses);
+        let divfieldrep3 = $("<div class='field'></div>");
+        let divcontrolrep3 = $("<div class='control'></div>");
+        let labelrep3 = $("<label class='label' for='reponse3q" + nb_Questions + "'>Réponse 3</label>");
+        let textareareponse3 = $("<textarea class='textarea is-info is-small' id='reponse3q" + nb_Questions + "' name='reponse3q" + nb_Questions + "' placeholder='Texte de la réponse 3 ...'></textarea>");
+
+        let divfieldrep4 = $("<div class='field'></div>");
+        let divcontrolrep4 = $("<div class='control'></div>");
+        let labelrep4 = $("<label class='label' for='reponse4q" + nb_Questions + "'>Réponse 4</label>");
+        let textareareponse4 = $("<textarea class='textarea is-info is-small' id='reponse4q" + nb_Questions + "' name='reponse4q" + nb_Questions + "' placeholder='Texte de la réponse 4 ...'></textarea>");
+
+        let divrepcorrectes = $("<div class='field'></div>");
+        let divcontrolrepco = $("<div class='control'></div>");
+        let labelgroup = $("<label class='label'>Réponse correcte</label>");
+        let radio1 = $("<label class='radio' for='rep1q" + nb_Questions + "'><input type='radio' id='rep1q" + nb_Questions + "' name='choix_repq" + nb_Questions + "' value='0' checked>Réponse 1</label>");
+        let radio2 = $("<label class='radio' for='rep2q" + nb_Questions + "'><input type='radio' id='rep2q" + nb_Questions + "' name='choix_repq" + nb_Questions + "' value='1'>Réponse 2</label>");
+        let radio3 = $("<label class='radio' for='rep3q" + nb_Questions + "'><input type='radio' id='rep3q" + nb_Questions + "' name='choix_repq" + nb_Questions + "' value='2'>Réponse 3</label>");
+        let radio4 = $("<label class='radio' for='rep4q" + nb_Questions + "'><input type='radio' id='rep4q" + nb_Questions + "' name='choix_repq" + nb_Questions + "' value='3'>Réponse 4</label>");
+
+        let divfieldbtn = $("<div class='field'></div>");
+        let divcontrolbtn = $("<div class='control'></div>");
+        let btn = $("<button class='button is-danger' type='button' id='btn_suppr_question" + nb_Questions + "' value='" + (nb_Questions - 1) + "'>Supprimer la question</button>");
+
+        divcontrolenonce.append(labelquestion, textareaquestion);
+
+        divcontrolrep1.append(labelrep1, textareareponse1);
+        divcontrolrep2.append(labelrep2, textareareponse2);
+        divcontrolrep3.append(labelrep3, textareareponse3);
+        divcontrolrep4.append(labelrep4, textareareponse4);
+
+        divfieldrep1.append(divcontrolrep1, phrasewarningrep1);
+        divfieldrep2.append(divcontrolrep2, phrasewarningrep2);
+        divfieldrep3.append(divcontrolrep3);
+        divfieldrep4.append(divcontrolrep4);
+
+        divcontrolrepco.append(labelgroup, radio1, radio2, radio3, radio4);
+        divrepcorrectes.append(divcontrolrepco);
+
+        divcontrolbtn.append(btn);
+        divfieldbtn.append(divcontrolbtn);
+
+        divenonce.append(divcontrolenonce, phrasewarningenonce);
+        divreponses.append(txttitre, divfieldrep1, "<br>", divfieldrep2, "<br>", divfieldrep3, "<br>", divfieldrep4, "<br>", divrepcorrectes, divfieldbtn);
+
+        $('#questions').append("<br><hr><br>", divenonce, divreponses);
     });
 
     // Fonction utilisée à chaque tentative d'envoie du formulaire d'inscription
@@ -207,7 +228,6 @@ $(document).ready(function(){
 
     // Fonction utilisée à chaque tentative d'envoie du formulaire de création de quiz
     $('#form_create_quiz').submit(function (){
-        alert(isFormQuizOK());
         return isFormQuizOK();
     });
 
@@ -261,6 +281,13 @@ $(document).ready(function(){
             $(this).toggle($(this).text().toLowerCase().indexOf(word) > -1)
         });
     });
+
+    let num_questions_suppr = [];
+
+    // Clic sur un des boutons de suppression de question
+    $('#questions').on('click', 'button[id*="btn_suppr_question"]', function () {
+        alert("non opérationnel");
+    });
 });
 
 // Fonction qui vérifie quel quiz est public
@@ -312,7 +339,7 @@ function process_quiz(num_question, begin){
 }
 
 function showResultatsQuiz() {
-    $('#resultats_quiz').css('display', 'block');
+    $('#resultats_quiz').removeClass('hidden-msg-w');
 
     $.ajax({
         url: 'user/ajax.php',
@@ -323,29 +350,28 @@ function showResultatsQuiz() {
         success: function (results) {
             let resultats = JSON.parse(results);
             let nb_rep_correctes = 0;
-            let nb_rep = 0;
-            console.log(resultats);
-            console.log(resultats['quiz'])
-            console.log(resultats['resultats'])
+            let num_q;
 
-            for (nb_rep = 0; nb_rep < resultats['resultats'].length; nb_rep++){
-                console.log(resultats['resultats'][nb_rep]);
-                console.log('table tr.trquestionsres #repres' + resultats['resultats'][nb_rep]);
-                console.log("CORRECTE ? " + resultats['quiz']['questions'][nb_rep]['reponses'][resultats['resultats'][nb_rep]]['iscorrect_reponse']);
-
-                let reponse = $('#tablequestionres' + nb_rep + ' tr.trquestionsres #repres' + resultats['resultats'][nb_rep]);
-                let correctfield = $('#correctornot' + nb_rep);
-                if (resultats['quiz']['questions'][nb_rep]['reponses'][resultats['resultats'][nb_rep]]['iscorrect_reponse'] === '1'){
+            for (num_q = 0; num_q < resultats['resultats'].length; num_q++){
+                let reponse = $('#tablequestionres' + num_q + ' tr.trquestionsres #repres' + resultats['resultats'][num_q]);
+                let correctfield = $('#correctornot' + num_q);
+                if (resultats['quiz']['questions'][num_q]['reponses'][resultats['resultats'][num_q]]['iscorrect_reponse'] === '1'){
                     reponse.css('background-color', '#3ec46d');
                     correctfield.text("Correct").css('color', 'green');
                     nb_rep_correctes++;
                 } else {
-                    reponse.css('background-color', 'red');
+                    reponse.css('background-color', '#ff5b5b');
                     correctfield.text("Faux").css('color', 'red');
+
+                    for (let i = 0; i < resultats['quiz']['questions'][num_q]['reponses'].length; ++i) {
+                        if (resultats['quiz']['questions'][num_q]['reponses'][i]['iscorrect_reponse'] === '1'){
+                            $('#tablequestionres' + num_q + ' tr.trquestionsres #repres' + i).css('background-color', '#3aa553');
+                        }
+                    }
                 }
             }
 
-            $('#nbreponsescorrectes').text('Nombre de réponses correctes : ' + nb_rep_correctes + ' / ' + nb_rep);
+            $('#nbreponsescorrectes').text('Nombre de réponses correctes : ' + nb_rep_correctes + ' / ' + num_q);
         },
         error: function () {
             alert('Erreur AJAX');

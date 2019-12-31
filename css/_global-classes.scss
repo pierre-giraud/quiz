@@ -1,14 +1,28 @@
 // Ce fichier contient toutes les classes scss qui sont utilisés de manières répétitives
+html{
+    height:100%;
+}
+
+body{
+    /*min-height:100%;
+    padding:0;
+    margin:0;*/
+    //position:relative;
+    /*display: flex;
+    flex-direction: column;*/
+}
+
 header {
-    position: fixed;
+    position: absolute;
     top: 0;
     width: 100%;
-    height: $header-height;
+    height: 100px;
     background-color: #73db75;
     z-index: 10;
 }
 
 section {
+    //position: relative;
     color: black;
 
     @include desktop{
@@ -21,7 +35,7 @@ section {
 
     @include mobile{
         @include set-font($size: 0.8em);
-        min-width: 500px;
+        min-width: 350px;
     }
 
     &.has-colored-bg {
@@ -32,6 +46,18 @@ section {
 .center-no-flex {
     text-align: center !important;
     vertical-align: middle !important;
+}
+
+.is-one-third-desktop {
+    @include desktop {
+        width: 35%;
+    }
+}
+
+.is-half-desktop {
+    @include desktop {
+        width: 50%;
+    }
 }
 
 .flex-center-vertical {
@@ -121,7 +147,7 @@ section {
         }
 
         h2 {
-            font-size: 1.8em;
+            font-size: 1.9em;
             font-weight: bold;
         }
 
@@ -145,14 +171,50 @@ section {
 }
 
 .has-margin-top {
-    margin-top: $header-height;
+    @include desktop {
+        margin-top: 100px;
+    }
 
     @include tablet-only{
-        margin-top: $header-height + 5%;
+        margin-top: 80px;
     }
 
     @include mobile{
-        margin-top: $header-height + 10%;
+        margin-top: 100px;
+    }
+}
+
+.hidden-msg-w {
+    display: none;
+}
+
+.is-fixed-desktop{
+    @include desktop {
+        position: fixed;
+    }
+}
+
+.is-fixed-touch {
+    @include touch{
+        position: fixed;
+    }
+}
+
+.no-border {
+    border: none;
+}
+
+.responsive-content {
+    padding: 20px;
+    border: 1px solid rgba(190, 190, 190, 0.50);
+    border-radius: 5px;
+    position: relative;
+
+    @include touch{
+        left: 0;
+        top: 15%;
+        width: 100%;
+        min-width: 350px;
     }
 }
 

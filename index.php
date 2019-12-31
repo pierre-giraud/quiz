@@ -2,7 +2,7 @@
 
 <section class="section font-titles has-margin-top">
     <div class="container is-flex flex-center-hv">
-        <div>
+        <div class="responsive-content no-border">
             <h1>Projet WEB 2019 - Quiz</h1>
 
             <?php
@@ -11,8 +11,8 @@
             $query = $mysql_db -> query("SELECT * FROM quiz WHERE ispublic_quiz = 1 ORDER BY id_quiz");
 
             if ($query -> num_rows > 0) : ?>
-                <nav class="panel">
-                    <p class="panel-heading">Quiz</p>
+                <nav class="panel is-primary">
+                    <p class="panel-heading">Choisir un Quiz</p>
                     <div class="panel-block">
                         <p class="control has-icons-left">
                             <input class="input" id="searchquiz" type="text" placeholder="Rechercher">

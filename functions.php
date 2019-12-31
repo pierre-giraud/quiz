@@ -37,6 +37,17 @@ function enregistrer_user(){
 
     $password = password_hash($password1, PASSWORD_DEFAULT);
 
+    // Si l'utilisateur enregistré est le premier, il est administrateur
+    $res_seul = $mysql_db -> query("SELECT * FROM users");
+    if ($res_seul -> num_rows === 0) {
+        $mysql_db -> query("INSERT INTO users (nom_user, mdp_user, type_user) VALUES ('$username', '$password', 'admin')");
+        $user_id = $mysql_db -> insert_id;
+        $_SESSION['user'] = getUserById($user_id);
+        header('location: user/home.php');
+
+        exit();
+    }
+
     // Vérification des doublons utilisateurs
     $query_verif = "SELECT * FROM users WHERE nom_user = '$username'";
     $results = $mysql_db -> query($query_verif);
@@ -52,7 +63,7 @@ function enregistrer_user(){
         unset($_SESSION['bad_login']);
         header('location: user/home.php');
     } else {
-        $_SESSION['bad_login'] = "Nom d'utilisateur déjà utilisé";
+        $_SESSION['bad_login'] = "Ce nom d'utilisateur est déjà pris";
     }
 }
 
@@ -104,11 +115,6 @@ function getUserById($id){
     global $mysql_db;
 
     $result = $mysql_db -> query("SELECT id_user, nom_user, type_user FROM users WHERE id_user = " . $id);
-    /*$user_instance = NULL;
-
-    if ($obj = $result -> fetch_object()){
-        $user_instance = new Utilisateur($obj->id_user, $obj->nom_user, $obj->type_user);
-    }*/
 
     return $result -> fetch_array(MYSQLI_ASSOC);
 }
@@ -140,6 +146,7 @@ function create_quiz(){
             }
         } elseif (strpos($key, "choix_repq") !== false){
             $mysql_db -> query("UPDATE reponses SET iscorrect_reponse = 1 WHERE id_reponse = " . $id_reponses[$value]);
+            $id_reponses = []; // Reset du tableau
         }
     }
 
@@ -152,7 +159,6 @@ function update_quiz(){
     $cpt_question = 0;
     $cpt_reponse = 0;
     $id_question = 0;
-    $id_reponses = [];
 
     // Parcours des données de $_POST
     foreach ($_POST as $key => $value){
@@ -178,6 +184,7 @@ function update_quiz(){
         } elseif (strpos($key,"reponse") !== false) {
             $num_question = $cpt_question - 1;
             $reponse = $mysql_db -> real_escape_string(trim($value));
+
             if ($reponse != ''){ // Si l'utilisateur a rempli ce champ
                 // Vérification de l'existence de la réponse
                 if (isset($_SESSION['quiz_to_admin']['questions'][$num_question]['reponses'][$cpt_reponse]['id_reponse'])) {
@@ -185,9 +192,13 @@ function update_quiz(){
                     $mysql_db -> query("UPDATE reponses SET texte_reponse = '$reponse' WHERE id_reponse = ".$id_reponse);
                 } else {
                     $mysql_db -> query("INSERT INTO reponses (texte_reponse, iscorrect_reponse, id_question) VALUES ('$reponse', 0," . $id_question . ")");
+                    $id_reponse = $mysql_db -> insert_id;
+                    $result = $mysql_db -> query("SELECT * FROM reponses WHERE id_reponse = ".$id_reponse);
+                    $rep = $result -> fetch_array(MYSQLI_ASSOC);
+                    $_SESSION['quiz_to_admin']['questions'][$num_question]['reponses'][$cpt_reponse] = $rep; // Mise à jour de $_SESSION pour les updates plus bas
                 }
             } else {
-                // Si une réponse existe, elle est supprimé
+                // Si une réponse existe, elle est supprimé car le champ est vide
                 if (isset($_SESSION['quiz_to_admin']['questions'][$num_question]['reponses'][$cpt_reponse]['id_reponse'])) {
                     $id_reponse = $_SESSION['quiz_to_admin']['questions'][$num_question]['reponses'][$cpt_reponse]['id_reponse'];
                     $mysql_db -> query("DELETE FROM reponses WHERE id_reponse = ".$id_reponse);
@@ -198,9 +209,10 @@ function update_quiz(){
             if ($cpt_reponse == 4) $cpt_reponse = 0;
         } elseif (strpos($key, "choix_repq") !== false){
             $num_question = $cpt_question - 1;
+
             // Remise à faux pour toutes les réponses
             $mysql_db -> query("UPDATE reponses SET iscorrect_reponse = 0 WHERE id_question = " . $id_question);
-            // On met à vrai la bonne réponse
+            // On met à vrai la bonne réponse à partir des données de $_SESSION
             $mysql_db -> query("UPDATE reponses SET iscorrect_reponse = 1 WHERE id_reponse = " . $_SESSION['quiz_to_admin']['questions'][$num_question]['reponses'][$value]['id_reponse']);
         }
     }

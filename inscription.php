@@ -7,9 +7,7 @@ include ('header.php');
 // Appel à la fonction enregistrer_user après avoir cliqué sur le bouton d'enregistrement
 if (isset($_SESSION['bad_login'])) unset($_SESSION['bad_login']);
 
-if (isset($_POST['reg_btn'])){
-    enregistrer_user();
-}
+if (isset($_POST['reg_btn'])) enregistrer_user();
 ?>
 
 <section class="section font-titles has-margin-top">

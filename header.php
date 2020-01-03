@@ -1,5 +1,8 @@
 <?php
     include ('functions.php');
+
+// Si le bouton de déconnexion est utilisé
+if (isset($_POST['deco'])) deconnexion_user();
 ?>
 
 <!DOCTYPE html>

@@ -8,9 +8,6 @@ session_start();
 // Connexion à la base de données
 $mysql_db = connexion_db();
 
-// Si le bouton de déconnexion est utilisé
-if (isset($_POST['deco'])) deconnexion_user();
-
 /*
  * Fonction servant à se connecter à la base de données
  */
@@ -35,6 +32,7 @@ function enregistrer_user(){
     $username  = $mysql_db -> real_escape_string(trim($_POST['username']));
     $password1 = $mysql_db -> real_escape_string(trim($_POST['password1']));
 
+    // Cryptage du mot de passe
     $password = password_hash($password1, PASSWORD_DEFAULT);
 
     // Si l'utilisateur enregistré est le premier, il est administrateur

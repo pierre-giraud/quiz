@@ -1,4 +1,8 @@
 $(document).ready(function(){
+    let page = $(location).attr('pathname').split('/').pop(); // Page courante
+    let nb_Questions = $('div .div_question').length;               // Nombre de questions du quiz affiché
+    let num_question_quiz = 0; // Numéro de la question actuellement en cours de traitement
+
     // Fonction lors d'un clic pour supprimer un utilisateur
     $('#suppr_user').click(function(){
         let id_user = [];
@@ -149,40 +153,38 @@ $(document).ready(function(){
         popup.addClass('popup-invisible');
     });
 
-    let nb_Questions = $('div .div_question').length; // Nombre de questions du quiz affiché
-
     $('#btn_add_question').click(function(){
         nb_Questions++;
 
         let divenonce = $("<div class='field div_question' id='enonce_question" + nb_Questions + "'></div>");
         let divcontrolenonce = $("<div class='control'></div>");
         let labelquestion = "<label class='label' for='enonce" + nb_Questions + "'>Question " + nb_Questions + "</label>";
-        let textareaquestion = "<textarea class='textarea is-primary is-small' id='enonce" + nb_Questions + "' name='enonce" + nb_Questions + "' placeholder='Texte de la question 1 ...'></textarea>";
+        let textareaquestion = "<textarea class='textarea is-primary is-small' id='enonce" + nb_Questions + "' name='enonce" + nb_Questions + "' placeholder='Texte de la question " + nb_Questions + " ...'></textarea>";
         let phrasewarningenonce = $("<p class='hidden-msg-w help is-danger'>Une question doit avoir un énoncé</p>");
 
-        let divreponses = $("<div id='reponses_question" + nb_Questions + "'></div>");
+        let divreponses = $("<div class='div_reponses' id='reponses_question" + nb_Questions + "'></div>");
         let txttitre = $("<br><h4>Réponses à la question " + nb_Questions + "</h4><br>");
 
         let divfieldrep1 = $("<div class='field'></div>");
         let divcontrolrep1 = $("<div class='control'></div>");
-        let labelrep1 = $("<label class='label' for='reponse1q" + nb_Questions + "'>Réponse 1</label>");
+        let labelrep1 = $("<label class='label labelrep' for='reponse1q" + nb_Questions + "'>Réponse 1</label>");
         let textareareponse1 = $("<textarea class='textarea is-info is-small' id='reponse1q" + nb_Questions + "' name='reponse1q" + nb_Questions + "' placeholder='Texte de la réponse 1 ...'></textarea>");
         let phrasewarningrep1 = $("<p class='hidden-msg-w help is-danger'>Cette réponse ne doit pas être vide</p>");
 
         let divfieldrep2 = $("<div class='field'></div>");
         let divcontrolrep2 = $("<div class='control'></div>");
-        let labelrep2 = $("<label class='label' for='reponse2q" + nb_Questions + "'>Réponse 2</label>");
+        let labelrep2 = $("<label class='label labelrep' for='reponse2q" + nb_Questions + "'>Réponse 2</label>");
         let textareareponse2 = $("<textarea class='textarea is-info is-small' id='reponse2q" + nb_Questions + "' name='reponse2q" + nb_Questions + "' placeholder='Texte de la réponse 2 ...'></textarea>");
         let phrasewarningrep2 = $("<p class='hidden-msg-w help is-danger'>Cette réponse ne doit pas être vide</p>");
 
         let divfieldrep3 = $("<div class='field'></div>");
         let divcontrolrep3 = $("<div class='control'></div>");
-        let labelrep3 = $("<label class='label' for='reponse3q" + nb_Questions + "'>Réponse 3</label>");
+        let labelrep3 = $("<label class='label labelrep' for='reponse3q" + nb_Questions + "'>Réponse 3</label>");
         let textareareponse3 = $("<textarea class='textarea is-info is-small' id='reponse3q" + nb_Questions + "' name='reponse3q" + nb_Questions + "' placeholder='Texte de la réponse 3 ...'></textarea>");
 
         let divfieldrep4 = $("<div class='field'></div>");
         let divcontrolrep4 = $("<div class='control'></div>");
-        let labelrep4 = $("<label class='label' for='reponse4q" + nb_Questions + "'>Réponse 4</label>");
+        let labelrep4 = $("<label class='label labelrep' for='reponse4q" + nb_Questions + "'>Réponse 4</label>");
         let textareareponse4 = $("<textarea class='textarea is-info is-small' id='reponse4q" + nb_Questions + "' name='reponse4q" + nb_Questions + "' placeholder='Texte de la réponse 4 ...'></textarea>");
 
         let divrepcorrectes = $("<div class='field'></div>");
@@ -215,10 +217,74 @@ $(document).ready(function(){
         divcontrolbtn.append(btn);
         divfieldbtn.append(divcontrolbtn);
 
-        divenonce.append(divcontrolenonce, phrasewarningenonce);
+        divenonce.append("<br><hr><br>", divcontrolenonce, phrasewarningenonce);
         divreponses.append(txttitre, divfieldrep1, "<br>", divfieldrep2, "<br>", divfieldrep3, "<br>", divfieldrep4, "<br>", divrepcorrectes, divfieldbtn);
 
-        $('#questions').append("<br><hr><br>", divenonce, divreponses);
+        $('#questions').append(divenonce, divreponses);
+
+        if (nb_Questions > 1 && $('#btn_suppr_question1')[0].hasAttribute('disabled')){
+            $('#btn_suppr_question1').removeAttr('disabled');
+        }
+    });
+
+    // Si on se situe sur les pages de création ou administration des quiz
+    if ((page === 'create_quiz.php' || page === 'admin_quiz.php') && nb_Questions === 1) {
+        $('#btn_suppr_question1').attr('disabled', 'true');
+    }
+
+    let num_questions_suppr = [];
+    // Clic sur un des boutons de suppression de question
+    $('#questions').on('click', 'button[id*="btn_suppr_question"]', function () {
+        if (page === 'create_quiz.php'){
+            let num_question = parseInt($(this).attr('id').substr(18));
+
+            $('#enonce_question' + num_question).remove();
+            $('#reponses_question' + num_question).remove();
+            nb_Questions--;
+
+            $('.div_question').each(function () {
+                let n_question = parseInt($(this).attr('id').substr(15));
+                let num_q = n_question - 1;
+
+                if (n_question > num_question){
+                    $(this).attr('id', 'enonce_question' + num_q);
+                    $(this).find('label').attr('for', 'enonce' + num_q).text('Question ' + num_q);
+                    $(this).find('textarea').attr('id','enonce' + num_q).attr('name', 'enonce' + num_q).attr('placeholder', 'Texte de la question ' + num_q + " ...");
+                }
+            });
+
+            $('.div_reponses').each(function () {
+                let n_question = parseInt($(this).attr('id').substr(17));
+                let num_q = n_question - 1;
+
+                if (n_question > num_question){
+                    let num_elem = 1;
+
+                    $(this).attr('id', 'reponses_question' + num_q);
+                    $(this).find('h4').text('Réponses à la question ' + num_q + ' :');
+
+                    $(this).find('.labelrep').each(function () {
+                        $(this).attr('for', 'reponse' + num_elem + 'q' + num_q);
+                        $(this).siblings().attr('id', 'reponse' + num_elem + 'q' + num_q).attr('name', 'reponse' + num_elem + 'q' + num_q );
+                        num_elem++;
+                    });
+
+                    num_elem = 1;
+
+                    $(this).find('.radio').each(function () {
+                        $(this).attr('for', 'rep' + num_elem + 'q' + num_q);
+                        $(this).children().attr('id', 'rep' + num_elem + 'q' + num_q).attr('name', 'choix_repq' + num_q);
+                        num_elem++;
+                    });
+
+                    $(this).find('.button').attr('id', 'btn_suppr_question' + num_q).attr('value', "" + (num_q - 1));
+                }
+            });
+
+            if (nb_Questions < 2) $('#btn_suppr_question1').attr('disabled', 'true');
+        } else {
+            alert("non opérationnel");
+        }
     });
 
     // Fonction utilisée à chaque tentative d'envoie du formulaire d'inscription
@@ -233,8 +299,6 @@ $(document).ready(function(){
 
     // Cochage des cases dont le quiz est public si l'on se situe dans la page profil utilisateur
     if ($(location).attr('pathname').split('/').pop() === 'home.php') public_checkboxes();
-
-    let num_question_quiz = 0; // Numéro de la question actuellement en cours de traitement
 
     // Fonction utilisée lors d'un clic sur le bouton "Commencer" pour effectuer un quiz
     $('#btn_start_quiz').click(function () {
@@ -280,13 +344,6 @@ $(document).ready(function(){
         $("a.panel-block").filter(function() {
             $(this).toggle($(this).text().toLowerCase().indexOf(word) > -1)
         });
-    });
-
-    let num_questions_suppr = [];
-
-    // Clic sur un des boutons de suppression de question
-    $('#questions').on('click', 'button[id*="btn_suppr_question"]', function () {
-        alert("non opérationnel");
     });
 });
 

@@ -44,14 +44,6 @@ function validerFormulaireQuiz() {
 
     toggleClassError(quizname);
 
-    /*if ($.trim(quizname.val()) < 1) {
-        //$('#msg-incorrect-quizname').removeClass('hidden-msg-w');
-        quizname.parent().siblings().removeClass('hidden-msg-w');
-    } else {
-        //$('#msg-incorrect-quizname').addClass('hidden-msg-w');
-        quizname.parent().siblings().addClass('hidden-msg-w');
-    }*/
-
     // Textareas
     $('form#form_create_quiz textarea').each(function () {
         if ($(this).attr('name').indexOf('enonce') >= 0){

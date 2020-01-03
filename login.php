@@ -9,9 +9,7 @@ unset($_SESSION['bad_login']);
 unset($_SESSION['bad_passwd']);
 unset($_SESSION['username']);
 
-if (isset($_POST['con_btn'])){
-    connecter_user();
-}
+if (isset($_POST['con_btn'])) connecter_user();
 ?>
 
 <section class="section font-titles has-margin-top">

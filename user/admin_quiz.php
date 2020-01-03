@@ -42,14 +42,14 @@ if (isset($_SESSION['quiz_to_admin'])) : ?>
                                 <p class="hidden-msg-w help is-danger">Une question doit avoir un énoncé</p>
                             </div>
 
-                            <div id="reponses_question<?= $num_q ?>">
+                            <div class="div_reponses" id="reponses_question<?= $num_q ?>">
                                 <br>
                                 <h4>Réponses à la question <?= $num_q ?> :</h4>
                                 <br>
 
                                 <div class="field">
                                     <div class="control">
-                                        <label class="label" for="reponse1q<?= $num_q ?>">Réponse 1</label>
+                                        <label class="label labelrep" for="reponse1q<?= $num_q ?>">Réponse 1</label>
                                         <textarea class="textarea is-info is-small" id="reponse1q<?= $num_q ?>" name="reponse1q<?= $num_q ?>" placeholder="Texte de la réponse <?= $num_q ?> ..."><?= $_SESSION['quiz_to_admin']['questions'][$i]['reponses'][0]['texte_reponse']?></textarea>
                                     </div>
                                     <p class="hidden-msg-w help is-danger">Cette réponse ne doit pas être vide</p>
@@ -59,7 +59,7 @@ if (isset($_SESSION['quiz_to_admin'])) : ?>
 
                                 <div class="field">
                                     <div class="control">
-                                        <label class="label" for="reponse2q<?= $num_q ?>">Réponse 2</label>
+                                        <label class="label labelrep" for="reponse2q<?= $num_q ?>">Réponse 2</label>
                                         <textarea class="textarea is-info is-small" id="reponse2q<?= $num_q ?>" name="reponse2q<?= $num_q ?>" placeholder="Texte de la réponse <?= $num_q ?> ..."><?= $_SESSION['quiz_to_admin']['questions'][$i]['reponses'][1]['texte_reponse']?></textarea>
                                     </div>
                                     <p class="hidden-msg-w help is-danger">Cette réponse ne doit pas être vide</p>
@@ -69,7 +69,7 @@ if (isset($_SESSION['quiz_to_admin'])) : ?>
 
                                 <div class="field">
                                     <div class="control">
-                                        <label class="label" for="reponse3q<?= $num_q ?>">Réponse 3</label>
+                                        <label class="label labelrep" for="reponse3q<?= $num_q ?>">Réponse 3</label>
                                         <textarea class="textarea is-info is-small" id="reponse3q<?= $num_q ?>" name="reponse3q<?= $num_q ?>" placeholder="Texte de la réponse <?= $num_q ?> ..."><?php if (count($_SESSION['quiz_to_admin']['questions'][$i]['reponses']) > 2) echo $_SESSION['quiz_to_admin']['questions'][$i]['reponses'][2]['texte_reponse']?></textarea>
                                     </div>
                                 </div>
@@ -78,7 +78,7 @@ if (isset($_SESSION['quiz_to_admin'])) : ?>
 
                                 <div class="field">
                                     <div class="control">
-                                        <label class="label" for="reponse4q<?= $num_q ?>">Réponse 4</label>
+                                        <label class="label labelrep" for="reponse4q<?= $num_q ?>">Réponse 4</label>
                                         <textarea class="textarea is-info is-small" id="reponse4q<?= $num_q ?>" name="reponse4q<?= $num_q ?>" placeholder="Texte de la réponse <?= $num_q ?> ..."><?php if (count($_SESSION['quiz_to_admin']['questions'][$i]['reponses']) > 3) echo $_SESSION['quiz_to_admin']['questions'][$i]['reponses'][3]['texte_reponse']?></textarea>
                                     </div>
                                 </div>

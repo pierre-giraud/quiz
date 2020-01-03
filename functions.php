@@ -1,6 +1,6 @@
 <?php
 
-include ('constants.php');
+include('configuration.php');
 
 // Démarre ou continue une session
 session_start();

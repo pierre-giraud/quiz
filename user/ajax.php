@@ -50,5 +50,6 @@ if (isset($_POST['save_reponse'])) {
 if (isset($_POST['get_infos_quiz'])) {
     $result['resultats'] = $_SESSION['result_quiz'];
     $result['quiz'] = $_SESSION['quiz_to_do'];
+
     echo json_encode($result);
 }

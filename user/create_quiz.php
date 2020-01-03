@@ -22,12 +22,11 @@ if (isset($_POST['btn_confirm_creation_quiz'])) create_quiz();
                     <p class="hidden-msg-w help is-danger">Un quiz doit comporter un nom</p>
                 </div>
 
-                <br>
-                <hr>
-                <br>
-
                 <div id="questions">
                     <div class="field div_question" id="enonce_question1">
+                        <br>
+                        <hr>
+                        <br>
                         <div class="control">
                             <label class="label" for="enonce1">Question 1</label>
                             <textarea class="textarea is-primary is-small" id="enonce1" name="enonce1" placeholder="Texte de la question 1 ..."></textarea>
@@ -35,14 +34,14 @@ if (isset($_POST['btn_confirm_creation_quiz'])) create_quiz();
                         <p class="hidden-msg-w help is-danger">Une question doit avoir un énoncé</p>
                     </div>
 
-                    <div id="reponses_question1">
+                    <div class="div_reponses" id="reponses_question1">
                         <br>
                         <h4>Réponses à la question 1 :</h4>
                         <br>
 
                         <div class="field">
                             <div class="control">
-                                <label class="label" for="reponse1q1">Réponse 1</label>
+                                <label class="label labelrep" for="reponse1q1">Réponse 1</label>
                                 <textarea class="textarea is-info is-small" id="reponse1q1" name="reponse1q1" placeholder="Texte de la réponse 1 ..."></textarea>
                             </div>
                             <p class="hidden-msg-w help is-danger">Cette réponse ne doit pas être vide</p>
@@ -52,7 +51,7 @@ if (isset($_POST['btn_confirm_creation_quiz'])) create_quiz();
 
                         <div class="field">
                             <div class="control">
-                                <label class="label" for="reponse2q1">Réponse 2</label>
+                                <label class="label labelrep" for="reponse2q1">Réponse 2</label>
                                 <textarea class="textarea is-info is-small" id="reponse2q1" name="reponse2q1" placeholder="Texte de la réponse 2 ..."></textarea>
                             </div>
                             <p class="hidden-msg-w help is-danger">Cette réponse ne doit pas être vide</p>
@@ -62,7 +61,7 @@ if (isset($_POST['btn_confirm_creation_quiz'])) create_quiz();
 
                         <div class="field">
                             <div class="control">
-                                <label class="label" for="reponse3q1">Réponse 3</label>
+                                <label class="label labelrep" for="reponse3q1">Réponse 3</label>
                                 <textarea class="textarea is-info is-small" id="reponse3q1" name="reponse3q1" placeholder="Texte de la réponse 3 ..."></textarea>
                             </div>
                         </div>
@@ -71,7 +70,7 @@ if (isset($_POST['btn_confirm_creation_quiz'])) create_quiz();
 
                         <div class="field">
                             <div class="control">
-                                <label class="label" for="reponse4q1">Réponse 4</label>
+                                <label class="label labelrep" for="reponse4q1">Réponse 4</label>
                                 <textarea class="textarea is-info is-small" id="reponse4q1" name="reponse4q1" placeholder="Texte de la réponse 4 ..."></textarea>
                             </div>
                         </div>

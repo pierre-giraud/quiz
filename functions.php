@@ -217,33 +217,6 @@ function update_quiz(){
 }
 
 function get_data_quiz($id, $admin_is_on){
-    /*global $mysql_db;
-
-    // Récupération des données de la table quiz
-    $result = $mysql_db -> query("SELECT id_quiz, titre_quiz, ispublic_quiz FROM quiz WHERE id_quiz = " . $id);
-    if ($result -> num_rows > 0) {
-        $_SESSION['quiz_to_admin'] = array();
-        $_SESSION['quiz_to_admin']['quiz'] = $result->fetch_array(MYSQLI_ASSOC);
-
-        // Récupération des données de la table questions et réponses
-        $result = $mysql_db -> query("SELECT id_question, texte_question FROM questions WHERE id_quiz = " . $id);
-        if ($result -> num_rows > 0) {
-            $questions = [];
-
-            $cpt = 0;
-            while ($row = $result -> fetch_array(MYSQLI_ASSOC)){
-                $questions[$cpt] = $row;
-
-                $res = $mysql_db -> query("SELECT * FROM reponses WHERE id_question = " . $row['id_question']);
-                while ($roww = $res -> fetch_array(MYSQLI_ASSOC)){
-                    $questions[$cpt]['reponses'][] = $roww;
-                }
-                $cpt++;
-            }
-
-            $_SESSION['quiz_to_admin']['questions'] = $questions;
-        }
-    }*/
     global $mysql_db;
 
     $quiz = array();

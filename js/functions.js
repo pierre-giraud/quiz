@@ -7,6 +7,7 @@ $(document).ready(function(){
     $('#suppr_user').click(function(){
         let id_user = [];
 
+        // Récupération des identifiants d'utilisateur
         $('#choix_user:checked').each(function(i){
             id_user[i] = $(this).val();
         });
@@ -42,6 +43,7 @@ $(document).ready(function(){
     $('#suppr_quiz').click(function(){
         let id_quiz = [];
 
+        // Récupération des identifiants des quiz
         $('#choix_quiz:checked').each(function(i){
             id_quiz[i] = $(this).val();
         });
@@ -55,6 +57,7 @@ $(document).ready(function(){
                         id_quiz: id_quiz
                     },
                     success: function () {
+                        // Suppression des lignes concernées
                         for (let i = 0; i < id_quiz.length; ++i) {
                             $('tr#rowq_' + id_quiz[i] + '').remove();
                             if ($('tr#rowqa_' + id_quiz + '').length > 0) $('tr#rowqa_' + id_quiz[i] + '').remove();
@@ -82,6 +85,7 @@ $(document).ready(function(){
     $('#suppr_quiz_admin').click(function(){
         let id_quiz = [];
 
+        // Récupération des identifiants des quiz
         $('#choix_quiz_admin:checked').each(function(i){
             id_quiz[i] = $(this).val();
         });
@@ -95,6 +99,7 @@ $(document).ready(function(){
                         id_quiz: id_quiz
                     },
                     success: function () {
+                        // Suppression des lignes concernées
                         for (let i = 0; i < id_quiz.length; ++i) {
                             $('tr#rowqa_' + id_quiz[i] + '').remove();
                             if ($('tr#rowq_' + id_quiz + '').length > 0) $('tr#rowq_' + id_quiz[i] + '').remove();
@@ -106,6 +111,7 @@ $(document).ready(function(){
                             $('#suppr_quiz_admin').remove();
                         }
 
+                        // Si le tableau de quiz personnels ne contient plus de quiz
                         if ($('#tablequiz tr').length === 2) {
                             $('#tablequiz').parent().replaceWith("<p>Vous n'avez aucun quiz</p>");
                         }
@@ -136,6 +142,7 @@ $(document).ready(function(){
                 id_quiz_set_public: {id_quiz, is_public}
             },
             success: function () {
+                // Création d'une popup
                 let body = $('body');
                 let popup = $("<div class='popup-visible' id='popup'></div>");
                 let msg = $("<article class='message is-success'></article>");
@@ -153,6 +160,7 @@ $(document).ready(function(){
                 popup.append(msg);
                 body.append(popup);
 
+                // Affectation de la fonction événementtielle pour un clic sur la croix
                 body.on('click', '#del-popup', function () {
                     $('#popup').remove();
                 });
@@ -233,6 +241,7 @@ $(document).ready(function(){
 
         $('#questions').append(divenonce, divreponses);
 
+        // Si le bouton Suppresion de question est désactivé, on le réactive
         if (nb_Questions > 1 && $('#btn_suppr_question1')[0].hasAttribute('disabled')){
             $('#btn_suppr_question1').removeAttr('disabled');
         }
@@ -243,16 +252,17 @@ $(document).ready(function(){
         $('#btn_suppr_question1').attr('disabled', 'true');
     }
 
-    let num_questions_suppr = [];
     // Clic sur un des boutons de suppression de question
     $('#questions').on('click', 'button[id*="btn_suppr_question"]', function () {
         if (page === 'create_quiz.php'){
             let num_question = parseInt($(this).attr('id').substr(18));
 
+            // Suppression des éléments concernant la question à retirer
             $('#enonce_question' + num_question).remove();
             $('#reponses_question' + num_question).remove();
             nb_Questions--;
 
+            // Parcours des éléments de classe "div_question" pour décrémenter le numéro de la question si supérieur à celui de la question supprimée
             $('.div_question').each(function () {
                 let n_question = parseInt($(this).attr('id').substr(15));
                 let num_q = n_question - 1;
@@ -264,6 +274,7 @@ $(document).ready(function(){
                 }
             });
 
+            // Parcours des éléments de classe "div_reponses" pour décrémenter le numéro de la question si supérieur à celui de la question supprimée
             $('.div_reponses').each(function () {
                 let n_question = parseInt($(this).attr('id').substr(17));
                 let num_q = n_question - 1;
@@ -292,6 +303,7 @@ $(document).ready(function(){
                 }
             });
 
+            // Si le nombre de question est de 1, on désactive le bouton de suppression de question
             if (nb_Questions < 2) $('#btn_suppr_question1').attr('disabled', 'true');
         } else {
             alert("non opérationnel");
@@ -374,10 +386,10 @@ function public_checkboxes() {
             data: {
                 id_quiz_public: id_quiz
             },
+            dataType: 'json',
             success: function (liste_quiz) {
-                let obj = JSON.parse(liste_quiz);
-                for (let key in obj){
-                    if (obj[key]['ispublic_quiz'] == 1){
+                for (let key in liste_quiz){
+                    if (liste_quiz[key]['ispublic_quiz'] === '1'){
                         $('#pquiz_' + key).prop('checked', true);
                     }
                 }
@@ -406,7 +418,9 @@ function process_quiz(num_question, begin){
     }
 }
 
+// Fonction d'affichage des résultats du quiz
 function showResultatsQuiz() {
+    // Affichage de la partie résultats
     $('#resultats_quiz').removeClass('hidden-msg-w');
 
     $.ajax({
@@ -415,17 +429,18 @@ function showResultatsQuiz() {
         data: {
             get_infos_quiz: true
         },
+        dataType: 'json',
         success: function (results) {
-            let resultats = JSON.parse(results);
             let nb_rep_correctes = 0;
             let num_q;
 
-            $('h2').text('Résultat du quiz "' + resultats['quiz']['quiz']['titre_quiz'] + '"');
+            $('h2').text('Résultat du quiz "' + results['quiz']['quiz']['titre_quiz'] + '"');
 
-            for (num_q = 0; num_q < resultats['resultats'].length; num_q++){
-                let reponse = $('#tablequestionres' + num_q + ' tr.trquestionsres #repres' + resultats['resultats'][num_q]);
+            // Vérification des bonnes réponses
+            for (num_q = 0; num_q < results['resultats'].length; num_q++){
+                let reponse = $('#tablequestionres' + num_q + ' tr.trquestionsres #repres' + results['resultats'][num_q]);
                 let correctfield = $('#correctornot' + num_q);
-                if (resultats['quiz']['questions'][num_q]['reponses'][resultats['resultats'][num_q]]['iscorrect_reponse'] === '1'){
+                if (results['quiz']['questions'][num_q]['reponses'][results['resultats'][num_q]]['iscorrect_reponse'] === '1'){
                     reponse.css('background-color', '#3ec46d');
                     correctfield.text("Correct").css('color', 'green');
                     nb_rep_correctes++;
@@ -434,14 +449,15 @@ function showResultatsQuiz() {
                     correctfield.text("Faux").css('color', 'red');
 
                     // Ajout d'un fond vert à la bonne réponse en cas de mauvaise réponse
-                    for (let i = 0; i < resultats['quiz']['questions'][num_q]['reponses'].length; ++i) {
-                        if (resultats['quiz']['questions'][num_q]['reponses'][i]['iscorrect_reponse'] === '1'){
+                    for (let i = 0; i < results['quiz']['questions'][num_q]['reponses'].length; ++i) {
+                        if (results['quiz']['questions'][num_q]['reponses'][i]['iscorrect_reponse'] === '1'){
                             $('#tablequestionres' + num_q + ' tr.trquestionsres #repres' + i).css('background-color', '#3aa553');
                         }
                     }
                 }
             }
 
+            // Ajout du texte indiquant le nombre de bonnes réponses
             $('#nbreponsescorrectes').text('Nombre de réponses correctes : ' + nb_rep_correctes + ' / ' + num_q);
         },
         error: function () {

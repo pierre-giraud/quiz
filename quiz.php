@@ -4,7 +4,7 @@
 <?php if (isset($_SESSION['result_quiz'])) unset($_SESSION['result_quiz']); ?>
 <section class="section font-titles has-margin-top">
     <div class="container is-flex flex-center-hv">
-        <div class="has-text-centered">
+        <div class=" no-border has-text-centered">
             <?php if ($_SESSION['quiz_to_do'] == null) : ?>
                 <p>Ce quiz n'est pas disponible ou n'existe pas</p>
             <?php else : ?>
@@ -15,7 +15,7 @@
                     <?php
                     $save_indices = [];
                     for ($i = 0; $i < count($_SESSION['quiz_to_do']['questions']); $i++) : ?>
-                        <table class="table is-bordered" id="tablequestion<?= $i ?>" style="display: none">
+                        <table class="table is-bordered hidden-msg-w" id="tablequestion<?= $i ?>">
                             <tr>
                                 <?php if (count($_SESSION['quiz_to_do']['questions'][$i]['reponses']) != 3) : ?>
                                 <td colspan="2"><?= $_SESSION['quiz_to_do']['questions'][$i]['texte_question'] ?></td>
@@ -25,6 +25,7 @@
                             </tr>
                             <tr class="trreponses">
                                 <?php
+                                    // Récupération des indices mélangés pour les afficher dans le désordre lors de l'exécution du quiz
                                     $indices = range(0, count($_SESSION['quiz_to_do']['questions'][$i]['reponses']) - 1);
                                     shuffle($indices);
                                     $save_indices[] = $indices;

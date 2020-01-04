@@ -21,7 +21,7 @@
     cursor: default;
 
     .dataline:hover {
-      background-color: #d5d5d5 !important;
+      background-color: $background-on-hover-line !important;
     }
   }
 }
@@ -63,7 +63,7 @@ input[type=checkbox] {
     cursor: pointer;
 
     &:hover {
-      background-color: #3ec46d;
+      background-color: $background-on-hover-reponse;
     }
   }
 }

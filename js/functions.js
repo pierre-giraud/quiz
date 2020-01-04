@@ -31,7 +31,7 @@ $(document).ready(function(){
                         }
                     },
                     error:function(){
-                        alert('Erreur AJAX');
+                        alert('Une erreur de communication est survenue, veuillez retenter ultérieurement');
                     }
                 });
             }
@@ -71,7 +71,7 @@ $(document).ready(function(){
                         }
                     },
                     error: function () {
-                        alert('Erreur AJAX');
+                        alert('Une erreur de communication est survenue, veuillez retenter ultérieurement');
                     }
                 });
             }
@@ -111,7 +111,7 @@ $(document).ready(function(){
                         }
                     },
                     error: function () {
-                        alert('Erreur AJAX');
+                        alert('Une erreur de communication est survenue, veuillez retenter ultérieurement');
                     }
                 });
             }
@@ -136,23 +136,34 @@ $(document).ready(function(){
                 id_quiz_set_public: {id_quiz, is_public}
             },
             success: function () {
-                let popup = $('#popup');
-                popup.removeClass('popup-invisible');
-                popup.addClass('popup-visible');
+                let body = $('body');
+                let popup = $("<div class='popup-visible' id='popup'></div>");
+                let msg = $("<article class='message is-success'></article>");
+
+                let msgheader = $("<div class='message-header'></div>");
+                let msgtitle = $("<p></p>").text("Success");
+                let btnquit = $("<button class='delete' aria-label='delete' id='del-popup'></button>");
+
+                let msgbody = $("<div class='message-body'></div>");
+                let textmsg = $("<p></p>").text("Les quiz sélectionnés seront visibles sur la page d'accueil !");
+
+                msgheader.append(msgtitle, btnquit);
+                msgbody.append(textmsg);
+                msg.append(msgheader, msgbody);
+                popup.append(msg);
+                body.append(popup);
+
+                body.on('click', '#del-popup', function () {
+                    $('#popup').remove();
+                });
             },
             error: function () {
-                alert('Erreur AJAX');
+                alert('Une erreur de communication est survenue, veuillez retenter ultérieurement');
             }
         });
     });
 
-    // Clic sur la fermeture de la popup
-    $('#del-popup').click(function () {
-        let popup = $('#popup');
-        popup.removeClass('popup-visible');
-        popup.addClass('popup-invisible');
-    });
-
+    // Clic sur le bouton d'ajout de questions d'un formulaire
     $('#btn_add_question').click(function(){
         nb_Questions++;
 
@@ -319,7 +330,7 @@ $(document).ready(function(){
                 process_quiz(++num_question_quiz, false)
             },
             error: function () {
-                alert('Erreur AJAX');
+                alert('Une erreur de communication est survenue, veuillez retenter ultérieurement');
             }
         });
     });
@@ -372,7 +383,7 @@ function public_checkboxes() {
                 }
             },
             error: function () {
-                alert('Erreur AJAX');
+                alert('Une erreur de communication est survenue, veuillez retenter ultérieurement');
             }
         });
     }
@@ -409,6 +420,8 @@ function showResultatsQuiz() {
             let nb_rep_correctes = 0;
             let num_q;
 
+            $('h2').text('Résultat du quiz "' + resultats['quiz']['quiz']['titre_quiz'] + '"');
+
             for (num_q = 0; num_q < resultats['resultats'].length; num_q++){
                 let reponse = $('#tablequestionres' + num_q + ' tr.trquestionsres #repres' + resultats['resultats'][num_q]);
                 let correctfield = $('#correctornot' + num_q);
@@ -420,6 +433,7 @@ function showResultatsQuiz() {
                     reponse.css('background-color', '#ff5b5b');
                     correctfield.text("Faux").css('color', 'red');
 
+                    // Ajout d'un fond vert à la bonne réponse en cas de mauvaise réponse
                     for (let i = 0; i < resultats['quiz']['questions'][num_q]['reponses'].length; ++i) {
                         if (resultats['quiz']['questions'][num_q]['reponses'][i]['iscorrect_reponse'] === '1'){
                             $('#tablequestionres' + num_q + ' tr.trquestionsres #repres' + i).css('background-color', '#3aa553');
@@ -431,7 +445,7 @@ function showResultatsQuiz() {
             $('#nbreponsescorrectes').text('Nombre de réponses correctes : ' + nb_rep_correctes + ' / ' + num_q);
         },
         error: function () {
-            alert('Erreur AJAX');
+            alert('Une erreur de communication est survenue, veuillez retenter ultérieurement');
         }
     });
 }

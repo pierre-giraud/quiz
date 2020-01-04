@@ -45,12 +45,9 @@
                 </div>
 
                 <div class="hidden-msg-w" id="resultats_quiz">
-                    <h3>Vos résultats</h3>
-                    <br><br>
-
                     <?php
                     for ($i = 0; $i < count($_SESSION['quiz_to_do']['questions']); $i++) : ?>
-                        <h3>Question <?= $i + 1 ?></h3>
+                        <h3>Question <?= $i + 1 ?></h3><br>
                         <table class="table is-bordered table-result" id="tablequestionres<?= $i ?>">
                             <tr>
                                 <?php if (count($_SESSION['quiz_to_do']['questions'][$i]['reponses']) != 3) : ?>

@@ -7,18 +7,6 @@ include('../header.php');
 if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisateur n'est pas connecté, redirection
 ?>
 
-<div class="popup-invisible" id="popup">
-    <article class="message is-success">
-        <div class="message-header">
-            <p>Success</p>
-            <button class="delete" aria-label="delete" id="del-popup"></button>
-        </div>
-        <div class="message-body">
-            <p>Les quiz sélectionnés seront visibles sur la page d'accueil !</p>
-        </div>
-    </article>
-</div>
-
 <?php if ($_SESSION['user']['type_user'] === 'admin') : ?>
 <section class="section font-titles has-colored-bg has-margin-top">
     <div class="container is-flex flex-center-hv">
@@ -60,7 +48,6 @@ if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisa
     </section>
 <?php endif ?>
 
-
 <section class="section font-titles <?= $_SESSION['user']['type_user'] === 'user' ? 'has-margin-top' : '' ?>">
     <div class="container is-flex flex-center-hv">
         <div class="responsive-content no-border">
@@ -75,7 +62,7 @@ if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisa
                 <p>Vous n'avez aucun quiz</p>
             <?php else : ?>
                 <div class="table-container">
-                    <table table class="table is-bordered is-narrow is-hoverable is-fullwidth" id="tablequiz">
+                    <table class="table is-bordered is-narrow is-hoverable is-fullwidth" id="tablequiz">
                         <tr>
                             <th>ID quiz</th>
                             <th>Titre</th>
@@ -89,7 +76,7 @@ if (!isset($_SESSION['user'])) header('location: ../login.php'); // Si l'utilisa
                                 <td><?= $row['titre_quiz'] ?></td>
                                 <td>
                                     <form action="admin_quiz.php" method="post">
-                                        <button class="button is-info" type="submit" id="btn_get_quiz<?= $row['id_quiz'] ?>" name="btn_get_quiz" value="<?= $row['id_quiz'] ?>">Administrer
+                                        <button class="button is-info" type="submit" id="btn_get_quiz<?= $row['id_quiz'] ?>" name="btn_get_quiz" value="<?= $row['id_quiz'] ?>">Administrer</button>
                                     </form>
                                 </td>
                                 <td class="center-no-flex"><input type="checkbox" id="pquiz_<?= $row['id_quiz'] ?>" name="choix_public" value="<?= $row['id_quiz'] ?>"</td>
